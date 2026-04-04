@@ -1,0 +1,82 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --black: black;
+  --antiquewhite: antiquewhite;
+}
+
+body {
+  background-image: url("https://th.bing.com/th/id/R.f55b9f735cac8db2dab6ddb44e6419b4?rik=rvFnoP%2fEzFhLVw&riu=http%3a%2f%2fgetwallpapers.com%2fwallpaper%2ffull%2fb%2f5%2fa%2f1016571-download-free-wallpaper-library-1920x1080-for-android-40.jpg&ehk=ar0Xpx0%2bxmDjws26J9CLQZ23GVFpqgWVe2e2kjchPyI%3d&risl=&pid=ImgRaw&r=0");
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  gap: 1rem;
+}
+
+h2 {
+  background-color: var(--black);
+  color: white;
+  padding: 1rem;
+  border: 2px dotted white;
+}
+
+.quote-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+  background-color: var(--antiquewhite);
+  width: 25vw;
+  height: 25vh;
+  padding: 1rem;
+  border: 2px solid var(--black);
+  border-radius: 1rem;
+}
+
+.quote,
+.from,
+.generateBtn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: "Playwrite+IE", serif;
+}
+.quote {
+  flex: 2;
+  font-size: 1.6rem;
+  font-style: italic;
+}
+
+.from,
+.generateBtn {
+  flex: 1;
+}
+.from {
+  font-size: 1.4rem;
+  color: rgb(182, 150, 107);
+}
+
+.generateBtn {
+  width: fit-content;
+  margin: 0 auto;
+  padding: 0 1rem;
+  background-color: var(--black);
+  opacity: 0.8;
+  color: white;
+  transition: 300ms ease-in-out;
+}
+
+.generateBtn:hover {
+  opacity: 1;
+}
+
+.generateBtn:active {
+  transform: scale(0.95);
+}

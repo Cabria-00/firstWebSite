@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-width: 100vw;
+  min-height: 100vh;
+  background-image: url(https://images.pexels.com/photos/45987/pexels-photo-45987.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.modal-btn {
+  font-family: Noto-Sans, sans-serif;
+  font-size: 3rem;
+  background-color: transparent;
+  padding: 1rem;
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.6);
+  position: absolute;
+  bottom: 100px;
+  right: 50px;
+  transition: 200ms ease-in-out;
+}
+
+.modal-btn:hover {
+  border: 3px solid rgba(0, 0, 0, 0.8);
+  color: rgba(0, 0, 0, 0.8);
+  transform: scale(1.05);
+  background-color: white;
+  cursor: pointer;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  width: fit-content;
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  border-radius: 1rem;
+  opacity: 0;
+  animation-name: animateModal;
+  animation-duration: 0.5s;
+}
+
+.closeBtn {
+  padding: 0.1rem;
+  background-color: transparent;
+  border: none;
+  font-size: 2rem;
+  z-index: 11;
+  cursor: pointer;
+  color: red;
+}
+
+.bg {
+  height: 100vh;
+  width: 100vw;
+  transition: 100ms ease-in-out;
+  z-index: 10;
+  background-color: transparent;
+}
+
+/* animation */
+
+@keyframes animateModal {
+  from {
+    top: -3000px;
+    opacity: 0;
+  }
+  to {
+    top: 50%;
+    opacity: 1;
+  }
+}

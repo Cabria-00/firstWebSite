@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM Manipulation</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=JetBrains+Mono:100,200,300,regular,500,600,700,800,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic"
+      rel="stylesheet"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet" />
+  
+  </head>
+  <body>
+    <script src="script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js" defer></script>
+    <nav>
+      <header><h1 class="js-h1">DOM Manipulation</h1></header>
+      <hr />
+      <ol id="lesson-list">
+        <li>
+          <span id="what-is-a-dom">Lesson 1: What is the DOM</span>
+          <ul>
+            <li id="dom">DOM</li>
+            <li id="dom-structure">DOM Structure</li>
+          </ul>
+        </li>
+        <li >
+          <span id="selecting-elements">Lesson 2: Select elements in the DOM</span>
+          <ul>
+            <li id="byID">getElementByID</li>
+            <li id="byClassName">getElementByClassName</li>
+            <li id="byTagName">getElementByTagName</li>
+            <li id="selector">querySelector</li>
+            <li id="selectorAll">querySelectorAll</li>
+          </ul>
+        </li>
+        <li >
+          <span id="dom-manipulation">Lesson 3:  Manipulate the DOM</span>
+          <ul>
+            <li id="styling">Styling the elements</li>
+            <li id="creating">Creating/adding an element</li>
+            <li id="textModifying">Modifying the text</li>
+            <li id="attributeModifying">Modifying the Attributes and Classes</li>
+            <li id="removing">Removing an element</li>
+          </ul>
+        </li>
+        <li>
+          <span id="dom-traversing">Lesson 4:Traversing the DOM</span>
+          <ul>
+            <li id="parentTraversal">Parent Node Traversal</li>
+            <li id="childTraversal">Child Node Traversal</li>
+            <li id="siblingTraversal">Sibling Node Traversal</li>
+          </ul>
+        </li>
+        <li >
+          <span id="event-handling">Lesson 5: Event Handling</span>
+          <ul id="event-handling-list">
+            <li id="event-object">Event Object</li>
+            <li id="addEventListener">.addEventListener</li>
+            <li id="event-propagation">Event Propagation</li>
+            <li id="event-delegation">Event Delegation</li>
+           <li id="intersectionObserver">Intersection Observer</li>
+          </ul>
+        </li>
+        <li>
+          <span id="sample-projects">Sample projects</span>
+          <ul>
+            <li id="read-more">Read more...</li>
+            <li><a href="./js-quote-generator/index.html"  target="_blank">JS Quote Generator</a></li>
+            <li><a href="./modal/index.html"  target="_blank">Modal</a></li>
+            <li><a href="./accordion/index.html"  target="_blank">Accordion</a></li>
+            <li><a href="./stopwatch/index.html"  target="_blank">Stopwatch</a></li>
+          </ul>
+        </li>
+      </ol>
+      <hr />
+      <footer>&copy;<span id="js-footer-span"></span> Harvy Lucinada</footer>
+    </nav>
+    <main>
+      <!-- Lesson 1 -->
+      <div class="card what-is-a-dom">
+        <h2 id="dom">What is the DOM?</h2>
+        <hr />
+        <p>Stands for "Document Object Model"</p>
+        <div id="lesson-one-div">
+          <ul>
+            <p>Use for manipulating the:</p>
+            <li>Content</li>
+            <li>Style</li>
+            <li>Structure</li>
+            <p>of the website.</p>
+            <p>It is one of the most unique and useful tools of javacript</p>
+          </ul>
+          <img
+            src="https://miro.medium.com/v2/resize:fit:700/1*GG1eBrCQ7eoVfI8fl-tIxQ.png"
+            alt="image of the dom"
+          />
+        </div>
+        <hr />
+      </div>
+      <div class="card dom-structure">
+        <h2>DOM Structure</h2>
+        <hr />
+        <p>
+          To access the DOM tree, you would need to start from the top, which is
+          in this case is the <em>document</em> object. This document object has
+          properties or <em>method</em> (function that is inside an object.) inside that allows users of javacript to access all the
+          elements inside of it.
+        </p>
+        <hr />
+        <p>Notes</p>
+      </div>
+      <!-- Lesson 2 -->
+      <div class="card selecting-elements">
+        <h2>Selecting the elements inside the DOM</h2>
+        <hr />
+        <p>
+          To access these elements or <em>nodes</em> of the DOM tree, we first
+          need to convert them into an object inside the javascript, for us to
+          be able to manipulate them. There are 5 main ways of seleccting an
+          element which are:
+        </p>
+        <div id="code-block">
+          <div class="code-block-one">
+            <pre>
+              <code class="language-javascript">
+              &lt;body&gt;
+                &lt;h1 id="myHeader"&gt;My heading&lt;/h1&gt;
+                  &lt;ul class="myList"&gt;              
+                    &lt;li class="myListItem"&gt; Item 1 &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 2 &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 3 &lt;/li&gt;
+                  &lt;/ul&gt;
+              &lt;/body&gt;
+              </code>
+            </pre>
+          </div>
+          <div class="code-block-two"></div>
+        </div>
+        <hr />
+       
+      </div>
+      <!-- getElementById -->
+      <div class="card byID">
+        <p>GetElementByID()</p>
+        <p>
+          - This method uses the unique <em>Id</em> of an element in order to
+          select. The way we use it is by declaring a variable and assigning
+          the element into it so that we can manipulate it later. We first
+          start with the <em>document</em> object then we traverse to the
+          specific widget we want to get.
+        </p>
+        <pre>
+          <code class="language-javascript">
+            const elementWithAnId = document.getElementById('myHeader');
+          </code>
+        </pre>
+        <hr />
+        
+      </div>
+      <!-- getElementByClassName -->
+       <div class="card byClassName">
+        <p>GetElementByClassName()</p>
+        <p>
+          - This method uses the <em>class</em> of an element in order to
+          select. The way we use it is similar to how we use the
+          <em>.getElementById()</em>. The only difference is that since this
+          class is not unique compared to an Id, when we use this, this can
+          return an array of elements containing that class. It is sorted by
+          the order they appear in the HTML file.
+        </p>
+        <pre>
+          <code class="language-javascript">
+            const elementWithAClass = document.getElementByClassName('myList');
+            const listItems = document.getElementByClassName('myListItem')
+
+            //if you console log both:
+            console.log(elementWithAClass); //Will return the HTML
+            console.log(listItems); //Will return an array of html element.
+
+          </code
+          >
+        </pre>
+       </div>
+      <!-- getElementByTagName -->
+      <div class="card byTagName">
+          <p>GetElementByTagName()</p>
+          <p>
+          - This method uses the <em>Tag</em> itself of an element in order to
+          select. The way we use it is similar to how we use the
+          <em>.getElementClassName()</em> and can also return an array-like
+          list of tags selected by it sorted in the order they appear on the
+          HTML
+        </p>
+        <pre>
+          <code class="language-javascript">
+            const elementWithH1Tag = document.getElementByTagName('h1');
+            const elementWithULTag = document.getElementByTagName('ul');
+            const elementWithLITag = document.getElementByTagName('li');
+          </code
+          >
+        </pre>
+        <hr />
+      </div>       
+      <!--querySelector -->
+      <div class="card selector">
+          <p>querySelector()</p>
+        <p>
+          This method lets you grab an element using the same way you target
+          things in CSS.
+        </p>
+
+        <ul>
+          <li># → for id</li>
+          <li>. → for class</li>
+          <li>tag name → for elements like li, div, etc.</li>
+        </ul>
+
+        <p>
+          ⚠️ <strong>Important:</strong> It only returns
+          <strong>one element</strong> — the first match it finds.
+        </p>
+
+        <p>
+          👉 Example: If you select li, it will only get the first list item
+          (<em>Item 1</em>), not all of them.
+        </p>
+        <!-- <p>
+          - This method uses the <em>any</em> of the Id, className or Tag of
+          an element in order to select. To distiguish what we are getting, we
+          would use method of how we target an element in CSS. If it is an id,
+          we would use the <em>#</em> symbol. The class would use the
+          <em>.</em> and the tag would just use the tag itself. This is only
+          return a single element that appears first in the the html file. An
+          example would be the 'li' tag. The will only return the li element
+          'Item 1'.
+        </p> -->
+        <pre>
+          <code class="language-javascript">
+            const firstLI = document.querySelector('li');
+            const firstMyListItem = document.querySelector('.myListItem');
+            const myh1 = document.querySelector('#myheader');
+            
+          </code
+          >
+        </pre>
+      </div>
+      <!-- querySelectorAll -->
+      <div class="card selectorAll">
+        <p>querySelectorAll()</p>
+        <p>
+          - This method is the same as <em>.querySelector</em> but selects all
+          of the element it matches. This returns an array-like list.
+        </p>
+        <pre>
+          <code class="language-javascript">
+            const allLI = document.querySelectorAll('li');
+          </code
+          >
+        </pre>
+        <hr />
+        <strong>NOTES:</strong>
+        <ul>
+          <li>I would suggest <em>querySelectorAll</em> or <em>querySelector</em> as this can target any element. The main flaw is that other browsers might not be able to support it. But as of writing, it is now 2026, so I guess most modern browsers can use it.
+          </li>
+          <li>Use the other 3 as older browsers can support it.</li>
+        </ul>
+      </div>
+      <!-- Lesson 3 -->
+      <div class="card dom-manipulation">
+        <h2> Lesson 3: DOM Manipulation</h2>
+        <hr />
+        <div id="lesson-one-div">
+          <ul>
+            <p>After selecting the element, we can manipulate the content element or even the element itself. We can change the:</p>
+            <li>Content</li>
+            <li>Style</li>
+            <li>Structure</li>
+            <p>of the element itself..</p>
+          </ul>
+        </div>
+        <hr />
+      </div>
+      <!-- Styling an element -->
+      <div class="card styling">
+        <h2 class="js-h2">Styling the element</h2>
+        <hr />
+        <p>
+          One way to manipulate the DOM is to style its element. We need to get the element itself using the any of the 5 main methods of selecting the element and assigning it to a variable. We will be using the same sample html to be consistent.
+        </p>
+
+        <div id="code-block">
+          <div class="code-block-one">
+            <pre>
+              <code class="language-javascript">
+              &lt;body&gt;
+                &lt;h1 id="myHeader"&gt;My heading&lt;/h1&gt;
+                  &lt;ul class="myList"&gt;              
+                    &lt;li class="myListItem"&gt; Item 1 &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 2 &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 3 &lt;/li&gt;
+                  &lt;/ul&gt;
+              &lt;/body&gt;
+              </code>
+            </pre>
+          </div>
+
+          <div><hr><p>
+            After selecting the element, we will apply the <em>style</em> property (method) and use <strong>any</strong> css property. You can find the list <a href="https://www.w3schools.com/jsref/dom_obj_style.asp">here.</a> Take note that if it consist of two words, we will use <em>camel case</em> instead <em>kebab case</em> which is what we usually use in CSS.
+          </p>
+             <div class="code-block-one">
+                <pre>
+                  <code class="language-javascript">
+                    const myHeader = document.querySelector('#myHeader');
+
+                    myHeader.style.color = 'red'; //The text color will turn to red.
+                    myHeader.style.fontSize = '2rem' //The text size will change its size into 32px. Default size of 1rem is 16px.
+                  </code>
+                </pre>
+              </div>
+          </div>
+
+          <hr />
+          <p><Strong>NOTES:</Strong>
+            Please take note of what method you are using to style an element. In this case, we are using what is called an <em>inline-styling</em>, which can usually style one element only. Let's say we target all the 'li' elements.
+          </p>
+         <div class="code-block-one">
+                <pre>
+                  <code class="language-javascript">
+                    const firstLI = document.querySelector('li');
+
+                    firstLI.style.color = 'red'; //Only the first LI will have a styling of red.
+
+                    //Even if you use the .querySelectorAll,
+
+                    const allLI = document.querySelectorAll('li');
+
+                    allLI.style.color = 'red'; //This will only throw a TypeError since we are styling an array, not a string.
+                  </code>
+                </pre>
+          </div>
+          <hr>
+          <p>To style all the <em>li</em> elements, we need to iterate/loop all of the li that is returned in an array form when we use <em>querySelectorAll</em>.</p>
+           <div class="code-block-one">
+                <pre>
+                  <code class="language-javascript">
+                    const allLI = document.querySelectorALL('li');
+
+                    allLI.forEach(element => {
+                      element.style.color = 'red';
+                    }); //This will make sure that all the li element text color will change into red.
+                  </code>
+                </pre>
+          </div>
+        </div>
+      </div>
+      <!-- Creating an element -->
+      <div class="card creating">
+        <h2>Creating an element</h2>
+        <hr />
+        <p>
+          Creating an element is also one of the way we can manipulate the DOM. One use of creating an element is when we are creating a todo app. 
+
+          Here are the ways to create an element. You can also read more <a href="https://www.w3schools.com/jsref/met_document_createelement.asp">here</a>.
+
+          For now let us declare all the elements we need.
+        </p>
+         <div class="code-block">
+            <pre>
+              <code class="language-javascript">
+              &lt;body&gt;
+                &lt;h1 id="myHeader"&gt;My heading&lt;/h1&gt;
+                  &lt;ul class="myList"&gt;              
+                    &lt;li class="myListItem"&gt; Item 1 &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 2 &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 3 &lt;/li&gt;
+                  &lt;/ul&gt;
+                  &lt;script&gt;
+                    const ul = document.querySelector('myList');
+                    const li = document.createElement('li');
+
+                    ul.append(li);
+                  &lt;/script&gt;
+              &lt;/body&gt;
+
+              </code>
+            </pre>
+          </div>
+          <p>
+            <strong>Explanation</strong>
+            <ul>
+              <li><em>.createElement()</em>: We use this method to create the <em>li</em> element.</li>
+              <li><em>.append()</em>: We use this method to tell javascript that we want to attached the created <em>li</em> element to the <em>ul</em> element, which will make the <em>ul</em> element its parent.</li>
+            </ul>
+           
+          </p>
+
+
+        <hr />
+        <p>Notes</p>
+      </div>
+       <!-- Modifying the text -->
+      <div class="card textModifying">
+        <h2>Modifying the text</h2>
+        <hr />
+        <p>
+          We can change the text, image or video of an element. There are three ways to do this:
+        </p>
+         <ul>
+            <li>.innerText: returns the text content of the element and all descendants, with spacing and CSS hidden text, but without tags.</li>
+            <li>.textContent: returns just the text content of the element and all its children, without CSS hidden text spacing and tags, except &lt;script&gt; and &lt;style&gt; elements.</li>
+            <li>.innerHTML: returns the text content of the element, including all spacing and inner HTML tags.</li>
+          </ul>
+         <div class="code-block">
+            <pre>
+              <code class="language-javascript">
+              &lt;body&gt;
+                &lt;h1 id="myHeader"&gt;My heading&lt;/h1&gt;
+                  &lt;ul class="myList"&gt;              
+                    &lt;li class="myListItem"&gt; Item &lt;p&gt;1&lt;/p&gt; &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 2 &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 3 &lt;/li&gt;
+                  &lt;/ul&gt;
+                  &lt;script&gt;
+                    const firstMyListItem = document.querySelector('myListItem');
+
+                    console.log(firstMyListItem.innerText);//returns: Item 1
+                    console.log(firstMyListItem.textContent);//returns: Item 1, the "1" wrapping to the next line
+                    console.log(firstMyListItem).innerHTML;//returns: Item &lt;p&gt;1&lt;/p&gt;
+
+                    firstMyListItem.innerText = 'Item 4'; // Changes the text from Item 1 to Item 4.
+                  &lt;/script&gt;
+              &lt;/body&gt;
+              </code>
+            </pre>
+          </div>
+          <p>
+            <strong>Explanation</strong>
+            <ul>
+              <li>We get the first list item in the list from the HTML document and turn it into a JavaScript object by assigning it into the <em>firstMyListItem</em> variable</li>
+              <li>We then attached the <em>.innerText</em> to the firstMyListItem variable the assigned the value <em>Item 4</em> to it so the text content changes.</li>
+            </ul>
+          </p>
+        <hr />
+        <p><strong>NOTES:</strong> It is usually not advisable to use <em>.innerHTML</em> because of security reasons. That is why most users prefer the other two.</p>
+      </div>
+      <!-- Modifying the Attributes and Classes -->
+      <div class="card attributeModifying">
+        <h2>Modifying the Attributes and Classes</h2>
+        <hr />
+        <p>
+          Once we created an element, to apply the styling similar to the other list items, we need to modify its attributes and classes. We can do that using the <em><a href="https://www.w3schools.com/Jsref/met_element_setattribute.asp">.setAttribute</a></em> method. To remove an attribute, we use the <em><a href="https://www.w3schools.com/Jsref/met_element_removeattribute.asp">.removeAttribute</a></em> method.</p>
+        <p>
+          The <em><a href="https://www.w3schools.com/Jsref/prop_element_classlist.asp">.classList</a></em> is another method to modifying an attribute. We can utilize the <em>.add</em> and <em>.remove</em> method.
+        </p>
+        <p>To find out if an element has a certain attribute, we can use the <em><a href="https://www.w3schools.com/Jsref/met_node_contains.asp">.contains()</a></em> method. This will return a boolean expression.</p>
+         <div class="code-block">
+            <pre>
+              <code class="language-javascript">
+              &lt;body&gt;
+                &lt;h1 id="myHeader"&gt;My heading&lt;/h1&gt;
+                  &lt;ul class="myList"&gt;              
+                    &lt;li class="myListItem"&gt; Item &lt;p&gt;1&lt;/p&gt; &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 2 &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 3 &lt;/li&gt;
+                  &lt;/ul&gt;
+                  &lt;script&gt;
+                    const fourthMyListItem = document.createElement('li');
+                    const fifthMyListItem = document.createElement('li');
+
+                    fourthMyListItem.innerText = 'Item 4'; // Assigns the text content to Item 4.
+                    fourthMyListItem.setAttribute('class', 'myListItem');
+
+                    fifthMyListItem.innerText = 'Item 5'; // Assigns the text content to Item 5.
+                    fifthMyListItem.classList.add('myListItem');
+                    fifthMyListItem.classList.contains('myListItem');//returns'true' to the console.
+                  &lt;/script&gt;
+              &lt;/body&gt;
+              </code>
+            </pre>
+          </div>
+          <p>
+            <strong>Explanation</strong>
+            <ol>
+              <li>We declare an variable and assigned the li element to it.</li>
+              <li>We assigned the text <em>Item 4</em> to the fourth li element</li>
+              <li>To ensure that the styling applies to the fourth li, we add the class attribute <em>myListItem</em>.</li>
+            
+            </ol>
+          </p>
+        <hr />
+        <p><strong>NOTES:</strong> We can also use the <em><a href="https://www.w3schools.com/Jsref/met_element_getattribute.asp">.getAttribute</a></em> method to get the attribute of an element.</p>
+      </div>
+      <!-- Removing an element -->
+      <div class="card removing">
+        <h2>Removing an element</h2>
+        <hr />
+        <p>
+         To remove an element, we simply use the <em><a href="https://www.w3schools.com/Jsref/met_element_remove.asp">.remove()</a></em> element.
+        </p>
+      
+        <div class="code-block">
+            <pre>
+              <code class="language-javascript">
+              &lt;body&gt;
+                &lt;h1 id="myHeader"&gt;My heading&lt;/h1&gt;
+                  &lt;ul class="myList"&gt;              
+                    &lt;li class="myListItem"&gt; Item 1 &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 2 &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 3 &lt;/li&gt;
+                  &lt;/ul&gt;
+                  &lt;script&gt;
+                    const ul = document.querySelector('myList');
+                    const li = document.createElement('li');
+
+                    ul.append(li);
+                    li.remove();//removes the created li element.
+                  &lt;/script&gt;
+              &lt;/body&gt;
+
+              </code>
+            </pre>
+        <hr />
+        <p>Notes</p>
+        </div>
+      </div>
+      <!-- Lesson 4 -->
+      <div class="card dom-traversing">
+        <h2>Lesson 4: Traversing the DOM</h2>
+        <hr />
+        <p>
+         Let's take a look at the DOM Tree below. The <strong>Document</strong> element is the root element. To traverse the DOM, we can use the relationship between elements to navigate easily. The relationship can be parent-child relationship or sibling relationship. There are other relationship which you can find in google(Yeah, search for it yourself).
+        </p>
+        <p>Elements that are above another element is a <em>parent</em> of that element. Alternatively, an element that is directly below an element is its <em>child</em>.
+        </p>
+        <ul>
+          <li>Document object is the parent of the &lt;HTML&gt; element.</li>
+          <li>&lt;HTML&gt; element is the parent of the &lt;head&gt; and &lt;body&gt; tag.</li>
+          <li>&lt;p&gt; and  &lt;h1&gt; tag are all the child of the &lt;body&gt; element, which can also be called its parent</li>
+        </ul>
+         <p>Elements that are on the same level of an element is a <em>sibling</em> of that element. 
+          </p>
+        <ul>
+          <li>&lt;head&gt; and &lt;body&gt; element are siblings.</li>
+          <li>&lt;p&gt; and &lt;h1&gt; element are also siblings.</li>
+        </ul>
+        <img src="/src/dom-tree.png" alt="DOM Tree image" style="width: 50%; height: 75%; margin: 0 auto;">
+        <hr>
+        <p>Using our example, let's establish the parent-child relationship and sibling relationship. I added a title to the list to expand our example.</p>
+        <div class="code-block">
+            <pre>
+              <code class="language-javascript">
+              &lt;body&gt;
+                &lt;h1 id="myHeader"&gt;My heading&lt;/h1&gt;
+                  &lt;p&gt; Item List &lt;/p&gt;
+                  &lt;ul class="myList"&gt;              
+                    &lt;li class="myListItem"&gt; Item 1 &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 2 &lt;/li&gt;
+                    &lt;li class="myListItem"&gt; Item 3 &lt;/li&gt;
+                  &lt;/ul&gt;
+              &lt;/body&gt;
+              </code>
+            </pre>
+          </div>  
+          <hr />
+          <p>Relationship</p>
+          <ol>
+              <li>Parent-Child elements</li>
+              <ul>
+                <li>&lt;h1&gt; and &lt;p&gt;</li>
+                <li>&lt;h1&gt; and &lt;ul&gt;</li>
+                <li>&lt;ul&gt; and all &lt;li&gt;</li>
+              </ul>
+              <li>Sibling elememts</li>
+                <ul>
+                  <li>&lt;p&gt; and &lt;ul&gt;</li>
+                  <li>all &lt;li&gt;</li>
+                </ul>
+          </ol>
+        <hr />
+        <p><strong>NOTES:</strong></p>
+        <p>Question: Is the &lt;title&gt; element under the &lt;head&gt; tag and the &lt;p&gt; or &lt;h1&gt; element under the &lt;body&gt; tag <em>siblings?</em></p>
+        <div class="lesson-four-question">
+          <button id="toggle-fourth-answer">Show Answer</button>
+          <p id="question-four-answer" class="hidden">The answer is <strong>No</strong>. Just like in real life, you both need to have the same parent to be silbings. Same thing applies on these elements, they are not sibling, but they are definitely a <em>descendant</em> of the &lt;html&gt; tag.</p>
+        </div>
+      </div>
+      <!-- Parent node traversal -->
+      <div class="card parentTraversal">
+        <h2>Parent Node Traversal</h2>
+        <hr />
+        <p>
+         We will start at the &lt;ul&gt; tag, we will then go up to its parent using these two methods: <em><a href="https://www.w3schools.com/jsref/prop_node_parentnode.asp">.parentNode</a></em> and <em><a href="https://www.w3schools.com/jsref/prop_node_parentelement.asp">.parentElement</a></em>. We will use this to go <strong>up</strong> the document.
+        </p>
+        <div class="code-block">
+          <pre>
+            <code class="language-javascript">
+            &lt;body&gt;
+              &lt;h1 id="myHeader"&gt;My heading&lt;/h1&gt;
+                &lt;p&gt; Item List &lt;/p&gt;
+                &lt;ul class="myList"&gt;              
+                  &lt;li class="myListItem"&gt; Item 1 &lt;/li&gt;
+                  &lt;li class="myListItem"&gt; Item 2 &lt;/li&gt;
+                  &lt;li class="myListItem"&gt; Item 3 &lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;script&gt;
+                  const myUl = document.querySelector('.myList');
+
+                  console.log(myUl.parentNode); 
+                  console.log(myUl.parentElement);
+                  //Both will log the h1 element.
+
+                  console.log(myUl.parentNode.parentNode); 
+                  console.log(myUl.parentElement.parentElement);
+                  //Both will log the body element.
+                &lt;/script&gt;
+            &lt;/body&gt;
+
+            </code>
+          </pre>
+        </div>  
+
+        <hr />
+        <p><strong>NOTES:</strong><br> Whats the difference between the two?</p>
+        <ul>
+          <li><em>parentNode</em>: this is a <strong>readonly</strong> property. Meaning you cannot change its content.This will return any node, regardless of type.</li>
+          <li><em>parentElement</em>: editable,which can take the <em>innerText</em> property etc., to alter the content, color, size, etc. This will only return an element. Lets say you are at the &lt;html&gt; element, calling a <em>.parentElement</em> will return a <em>null</em> on the console. The <em>.parentNode</em> will return the <em>document</em> node itself.</li>
+        </ul>
+        <p>Additionally, you can <em>stack</em> these two methods to get to the grandparent element.</p>
+        <p>More info <a href="https://youtu.be/5fb2aPlgoys?t=1800">here</a>.</p>
+      </div>
+       <!-- Child node traversal -->
+      <div class="card childTraversal">
+        <h2>Child Node Traversal</h2>
+        <hr />
+        <p>
+         To go <strong>down</strong> the document, we will use the child node traversal. We will still use the &lt;ul&gt; tag as a starting point. Similar to parent node traversal, we also have <em><a href="https://www.w3schools.com/Jsref/prop_node_childnodes.asp">.childNode</a></em> and <em><a href="https://www.w3schools.com/Jsref/prop_element_children.asp">.children</a></em> methods. A video explanation could be found <a href="https://youtu.be/5fb2aPlgoys?t=1911">here</a>. Others: <em><a href="https://www.w3schools.com/Jsref/prop_node_firstchild.asp">.firstChild</a></em>, <em><a href="https://www.w3schools.com/Jsref/prop_node_lastchild.asp">.lastChild</a></em>, <em><a href="https://www.w3schools.com/Jsref/prop_element_firstelementchild.asp">.firstElementChild</a></em>, <em><a href="https://www.w3schools.com/Jsref/prop_element_lastelementchild.asp">.lastElementChild</a></em>
+        </p>
+        <div class="code-block">
+          <pre>
+            <code class="language-javascript">
+            &lt;body&gt;
+              &lt;h1 id="myHeader"&gt;My heading&lt;/h1&gt;
+                &lt;p&gt; Item List &lt;/p&gt;
+                &lt;ul class="myList"&gt;              
+                  &lt;li class="myListItem"&gt; Item 1 &lt;/li&gt;
+                  &lt;li class="myListItem"&gt; Item 2 &lt;/li&gt;
+                  &lt;li class="myListItem"&gt; Item 3 &lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;script&gt;
+                  const myUl = document.querySelector('.myList');
+
+                  console.log(myUl.childNode); 
+                  //Will log an array of nodes(element nodes, comment nodes, text nodes).
+                  myUl.childNode[1].style.color = 'blue';
+                  //this will make the target element's text turn into blue.
+
+                  console.log(myUl.firstElementChild); 
+                  console.log(myUl.lastElementChild).
+                  //Will log the first element and last element respectively.
+                &lt;/script&gt;
+            &lt;/body&gt;
+
+            </code>
+          </pre>
+        </div>
+        <p><strong>Remember</strong> since the <em>.childNode</em> method returns an array, if we want to style an element, we need to access that element the same way we access a normal array.</p>  
+
+        <hr />
+        <p><strong>NOTES:</strong><br>HTML Nodes vs Elements</p>
+        <ul>
+          <ul><h3>childNodes vs children</h3>
+            <li><strong>childNodes</strong>: returns child <strong>nodes</strong> (element nodes, text nodes, and comment nodes).</li>
+            <li><strong>children</strong>: returns child elements (not text and comment nodes).</li>
+          </ul>
+          <ul><h3>firstChild vs firstElementChild</h3>
+             <li><strong>firstChild</strong>: returns the first child <strong>nodes</strong> (an element node, a text node or a comment node). Whitespace between elements are also text nodes.</li>
+            <li><strong>firstElementChild</strong>: returns the first child elements (not text and comment nodes).</li>
+          </ul>
+          <ul><h3>lastChild vs lastElementChild</h3>
+             <li><strong>lastChild</strong>: returns the last child <strong>nodes</strong> (an element node, a text node or a comment node). Whitespace between elements are also text nodes.</li>
+            <li><strong>lastElementChild</strong>: returns the last child elements (not text and comment nodes).</li>
+          </ul>
+        </ul>
+      </div>
+       <!-- Sibling node traversal -->
+      <div class="card siblingTraversal">
+        <h2>Sibling Node Traversal</h2>
+        <hr />
+        <p>
+          An element will become a sibling of another element if they are on the <em>same</em> level under the <strong>same parent</strong>. Additionally, it is not limited to to elements, comment nodes and other nodes can become a sibling of an element as long as the condition is met.
+        </p>
+        <p>Methods to traverse the DOM between siblings:</p>
+        <ul>
+          <li><em><a href="https://www.w3schools.com/jsref/prop_node_previoussibling.asp">.previousSibling</a></em>: returns the prevous node on the same tree level in the form of a <em>node object</em> that is <em>read-only</em>.</li>
+          <li><em><a href="https://www.w3schools.com/jsref/prop_node_nextsibling.asp">.nextSibling</a></em>: returns the next node on the same tree level. It returns a node object and is read-only.</li>
+          <li><em><a href="https://www.w3schools.com/jsref/prop_element_previouselementsibling.asp">.previousElementSibling</a></em>: returns the previous element in the same tree level and is <em>read-only</em>.</li>
+          <li><em><a href="https://www.w3schools.com/jsref/prop_element_nextelementsibling.asp">.nextElementSibling</a></em>: returns the next element in the same tree level.It is a read-only property.</li>
+        </ul>
+        <p></p>
+
+        <hr />
+        <p><strong>NOTES:</strong></p>
+        <p>It is prefered to use the <em>.previousElementSibling</em> and <em>.nextElementSibling</em> because it only returns the element unlike the <em>previousSibling</em> and  <em>nextSibling</em> which return the other nodes(text, comment, element) as a node object.</p>
+      </div>
+      <!-- Lesson 5 -->
+      <div class="card event-handling">
+        <h2>Lesson 5: Event Handling</h2>
+        <hr />
+        <p>
+          Now that we know how to select elements, modify them, how to traverse them, the next lesson would be <em>event listeners</em>. This is one of the most frequently use function of JavaScript in web design. A detailed explanation could be fount <em><a href="https://www.w3schools.com/js/js_events.asp">here</a></em>.
+        </p>
+        <p>We would be using a different code to show each event. These codes are the codes on the buttons below. I will not be including the CSS styling and only focus on the functionality of the buttons and events. This will serve as an example.</p>
+         <div class="code-block">
+          <pre>
+            <code class="language-javascript">
+            &lt;div class='set-btn-one'&gt;
+              &lt;div class='group-one show-alert'&gt;
+                &lt;label for='text-to-display'&gt; Show Alert
+                &lt;/label&gt;
+                &lt;input type='text' name='text-to-display' placeholder='Type message'&gt;
+                &lt;button&gt;Click me&lt;/button&gt;
+              &lt;/div&gt;
+
+              &lt;div class='group-one show-confirmation'&gt;
+                &lt;label for='text-to-display'&gt; Show Confirmation
+                &lt;/label&gt;
+                &lt;input type='text' name='text-to-display' read-only&gt;
+                &lt;button&gt;Click me&lt;/button&gt;
+              &lt;/div&gt;
+
+              &lt;div class='group-one show-propmt'&gt;
+                &lt;label for='text-to-display'&gt; Show Prompt
+                &lt;/label&gt;
+                &lt;input type='text' name='text-to-display' read-only&gt;
+                &lt;button&gt;Click me&lt;/button&gt;
+              &lt;/div&gt;
+            
+              &lt;script&gt;
+                const showAlert = document.querySelector(".show-alert-btn");
+                const showConfirm = document.querySelector(".show-confirm-btn");
+                const showPrompt = document.querySelector(".show-prompt-btn");
+
+                const inputAlert = document.querySelector(".alert-input");
+                const inputConfirm = document.querySelector(".confirm-input");
+                const inputPrompt = document.querySelector(".prompt-input");
+
+                // showAlert
+                showAlert.addEventListener("click", (e) => {
+                  e.preventDefault();
+                  inputAlert.value === ""
+                    ? alert(`The user is quiet`)
+                    : alert(`The user says ${inputAlert.value}`);
+                  inputAlert.value = '';
+                });
+                // showConfirm
+                showConfirm.addEventListener("click", (e) => {
+                  e.preventDefault();
+                  const answer = confirm("Do you understand the lesson so far?");
+                  if (answer) {
+                    inputConfirm.value = "Nice 😎";
+                    setTimeout(() => {
+                      inputConfirm.value = "";
+                    }, 3000);
+                  } else {
+                    inputConfirm.value = "Hmm... we'll fix that 😏";
+                  }
+                });
+                //showPrompt
+                showPrompt.addEventListener("click", (e) => {
+                  e.preventDefault();
+                  const answer = prompt(`Do you have something to say?`).trim();
+                  answer === ""
+                    ? (inputPrompt.value = `The user says nothing.`)
+                    : (inputPrompt.value = `${answer}`);
+                  setTimeout(() => {
+                    inputPrompt.value = "";
+                  }, 3000);
+                });
+                
+              &lt;/script&gt;
+            </code>
+          </pre>
+        </div> 
+        
+        <div class="set-btn-one">
+          <div class="group-one show-alert">
+            <label for="text-to-display">Show Alert</label>
+            <input class="alert-input" type="text" name="text-to-display" placeholder="Type message">
+            <button class="show-alert-btn">Click me</button>
+          </div>
+          <div class="group-one show-confirm">
+            <label for="text-to-display">Show Confirmation</label>
+            <input class="confirm-input" type="text" name="text-to-display" readonly>
+            <button class="show-confirm-btn">Click me</button>
+          </div>
+          <div class="group-one show-propmt">
+            <label for="text-to-display">Show Propmt</label>
+            <textarea name="text-to-display" class="prompt-input" readonly></textarea>                
+            <button class="show-prompt-btn">Click me</button>
+          </div>
+        </div>
+        <hr />
+        <p>Notes</p>
+      </div>
+      <!-- event object -->
+      <div class="card event-object">
+        <h2>Event object</h2>
+        <hr />
+        <p>
+        The <em>Event Object (e)</em> is automatically created whenever an event occurs
+        (e.g., click, hover, keypress). It contains useful information about the event
+        and allows us to interact with the DOM based on what happened.
+        </p>
+
+        <p><strong>Common Properties:</strong></p>
+        <ul>
+          <li><code>e.target</code> – the actual element that triggered the event</li>
+          <li><code>e.currentTarget</code> – the element where the event listener is attached</li>
+          <li><code>e.type</code> – the type of event (click, keydown, etc.)</li>
+          <li><code>e.timeStamp</code> – the time (in ms) when the event occurred</li>
+        </ul>
+
+        <p><strong>Mouse Event Properties:</strong></p>
+        <ul>
+          <li><code>e.clientX</code> – X position of the mouse (viewport)</li>
+          <li><code>e.clientY</code> – Y position of the mouse (viewport)</li>
+          <li><code>e.pageX</code> – X position relative to the whole page</li>
+          <li><code>e.pageY</code> – Y position relative to the whole page</li>
+        </ul>
+
+        <p><strong>Keyboard Event Properties:</strong></p>
+        <ul>
+          <li><code>e.key</code> – the key pressed (e.g., "a", "Enter")</li>
+          <li><code>e.code</code> – physical key on the keyboard (e.g., "KeyA")</li>
+          <li><code>e.ctrlKey</code> – true if Ctrl is pressed</li>
+          <li><code>e.shiftKey</code> – true if Shift is pressed</li>
+          <li><code>e.altKey</code> – true if Alt is pressed</li>
+        </ul>
+
+        <p><strong>Useful Methods:</strong></p>
+        <ul>
+          <li><code>e.preventDefault()</code> – stops default behavior (e.g., form submit, link navigation)</li>
+          <li><code>e.stopPropagation()</code> – stops the event from bubbling up</li>
+        </ul>
+
+        <p>
+        The event object is passed as a parameter to event handler functions.
+        </p>
+        <p>
+        To learn more about the event object, click 
+        <em><a href="https://www.w3schools.com/jsref/obj_event.asp">here</a></em>.
+        </p>
+        
+        
+      </div>
+      <!-- .addEventListener -->
+      <div class="card addEventListener">
+        <h2>.addEventListener</h2>
+        <hr />
+        <p>
+          This methods attaches an event handler to the specified element. Click <em><a href="https://www.w3schools.com/js/js_htmldom_eventlistener.asp">here</a></em> for more information.
+        </p>
+        <p>These method can take 3 parameters, the event(click, mouseover etc), function, and event propagation(true[capturing] and false(bubling), false is the default value.)The syntax is <em>element.addEventListener('[event]', [function], false);</em></p>
+        <hr />
+        <h2><a href="#">Click event</a></h2>
+        <div class="code-block">
+          <pre>
+            <code class="language-javascript">
+              &lt;div class='click-event'&gt;
+                &lt;p&gt;Click the button to change to a random color.&lt;/p&gt;
+                &lt;button class='clickEvent-btn'&gt;&lt;/button&gt;
+              &lt;/div&gt;
+              &lt;script&gt;
+                const clickEventBtn = document.querySelector(".clickEvent-btn");
+
+                function changeButtonColor() {
+                  const set1 = Math.floor(Math.random() * 255);
+                  const set2 = Math.floor(Math.random() * 255);
+                  const set3 = Math.floor(Math.random() * 255);
+
+                  const color = `rgb(${set1},${set2},${set3})`;
+                  console.log(color);
+
+                  clickEventBtn.style.backgroundColor = color;
+                };
+                clickEventBtn.addEventListener("click", changeButtonColor);
+              &lt;/script&gt;
+            </code>
+          </pre>
+        </div> 
+        <hr/>
+        <div class="click-event">
+          <p>Click the button to change to a random color.</p>
+          <button class="clickEvent-btn">Watch me change</button>
+        </div>
+        <hr>
+
+        <h2><a href="https://www.w3schools.com/js/js_events_mouse.asp">Mouse over event</a></h2>
+        <div class="code-block">
+          <pre>
+            <code class="language-javascript">
+             &lt;div class="hover-event"&gt;
+                &lt;p&gt;Hover on the button to change the text.&lt;/p&gt;
+                &lt;input type="text" placeholder="Add additional message" class="add-message"&gt;
+                &lt;button class="js-add-message"&gt;Add&lt;/button&gt;&lt;br&gt;
+                &lt;button class="hoverEvent-btn"&gt;Watch me change&lt;/button&gt;
+              &lt;/div&gt;
+              &lt;script&gt;
+                const hoverEventBtn = document.querySelector(".hoverEvent-btn");
+                const addMessageField = document.querySelector(".add-message");
+                const addMessageBtn = document.querySelector(".js-add-message");
+
+                const message = [
+                  "Hi!",
+                  "Good Morning!",
+                  "おはようございます!",
+                  " がんばれ!",
+                  "Take a break!",
+                ];
+
+                function addMessage() {
+                  const newMessage = addMessageField.value;
+                  if (newMessage) {
+                    message.push(newMessage);
+                    addMessageField.value = "";
+                  }
+                }
+
+                addMessageBtn.addEventListener("click", addMessage);
+
+                function changeButtonMessage() {
+                  const set1 = Math.floor(Math.random() * message.length);
+                  console.log(set1);
+
+                  hoverEventBtn.textContent = message[set1];
+                }
+
+                hoverEventBtn.addEventListener("mouseover", changeButtonMessage);
+
+                hoverEventBtn.addEventListener("click", changeButtonMessage);
+              &lt;/script&gt;
+            </code>
+          </pre>
+        </div> 
+        <hr/>
+        <div class="hover-event">
+          <p>Hover on the button to change the text.</p>
+          <input type="text" placeholder="Add additional message" class="add-message">
+          <button class="js-add-message">Add</button><br>
+          <button class="hoverEvent-btn">Watch me change</button>
+        </div>
+        <hr>
+        <p>Notes</p>
+      </div>
+       <!-- event propagation -->
+      <div class="card event-propagation">
+        <h2>Event Propagation</h2>
+        <hr />
+        <p>
+          <strong>Event Propagation</strong> refers to how an event travels through the document object model or DOM tree.
+        </p>
+        <p>A similar comparison is electricity traveling to a wire until it reaches it destination. A DOM tree consist of nodes, so the event travels every node until it reach the target element which is then it is forcibly stopped. It has 3 phases:</p>
+        <ol>
+          <li>Event Capturing</li>
+          <li>Target</li>
+          <li>Event Bubling</li>
+        </ol>
+        <p>This phase starts from the <em>Event Capturing</em>, which starts from root(document) and travels all the way to the <em>target</em>. When it reaches the <em>target</em>, it starts the <em>Event bubbling</em> phase, which begins from the target, all the way back to the root.</p>
+        <p><a href="https://youtu.be/5fb2aPlgoys?t=3014" target="_blank">Source</a></p>
+        <hr>
+        <p><Strong>Notes:</Strong></p>
+        <p>A third parameter that we can use so the an event listener will only activate once or for only a specific number of action.</p>
+        <p><em>element.addEventListener('click', ()=?{}, {once: true})</em></p>
+        <p>Now this button will only work once whe clicked.</p>
+        <hr>
+        <p><em><a href="https://www.w3schools.com/jsref/event_preventdefault.asp" target="_blank">.preventDefault</a></em></p><p>The function of this method is to stop the default action of an element. In this case, when you clicked a link with an anchor tag(&lt;a&gt;), its default function is to refresh the page. So to prevent that, we use the <em>.preventDefault</em></p> method.
+      </div>
+      <!-- event delegation -->
+      <div class="card event-delegation">
+        <h2>Event Delegation</h2>
+        <hr />
+        <p>
+          <strong>Event delegation</strong> allows users to append a <strong>SINGLE</strong> event listener to a parent element that adds it to all of its present <strong>AND</strong> future descendants that match a selector.
+        </p>
+        <p>Look at the example below, we put an event listener to every element. This is fine. But we can simplify this and achieve the same effect with less code. The event only activates when the element is clicked.</p>
+        <hr>
+        <div class="code-block">
+          <pre>
+            <code class="language-javascript">
+            &lt;body&gt;
+              &lt;h1 id="myHeader"&gt;Favorite Food&lt;/h1&gt;
+                &lt;p&gt; Today's Menu &lt;/p&gt;
+                &lt;ul class="myFave"&gt;              
+                  &lt;li id='pasta' class="myListItem"&gt; Pasta&lt;/li&gt;
+                  &lt;li id='chicken' class="myListItem"&gt; Chicken &lt;/li&gt;
+                  &lt;li id='Fish steak' class="myListItem"&gt; Fish steak &lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;script&gt;
+                  // putting eventListener to all buttons
+                  const myList = document.querySelectorAll(".myFave");
+                  const fauxConsole = document.getElementById("js-itemLog");//Pseudo-console
+
+                  myList.forEach((btn) => {
+                    btn.addEventListener("click", (e) => {
+                      const target = e.currentTarget;
+                      if (btn === target) {
+                        const foodName = btn.innerText;
+
+                        const myPElement = document.createElement("p");
+                        myPElement.innerText = `${foodName} was clicked!`;
+
+                        fauxConsole.append(myPElement); 
+                      }
+                    });
+                  });
+                &lt;/script&gt;
+            &lt;/body&gt;
+            </code>
+          </pre>
+        </div>
+      
+        <hr>
+        <p>Now we will use the event delegation method. The algorithm steps are as follows:</p>
+        <ol>
+          <li></li>
+        </ol>
+        <div class="code-block">
+          <pre>
+            <code class="language-javascript">
+            &lt;body&gt;
+              &lt;h1 id="myHeader"&gt;Favorite Food&lt;/h1&gt;
+                &lt;p&gt; Today's Menu &lt;/p&gt;
+                &lt;ul class="myFaveList"&gt;              
+                  &lt;li id='pasta' class="myListItem"&gt; Pasta&lt;/li&gt;
+                  &lt;li id='chicken' class="myListItem"&gt; Chicken &lt;/li&gt;
+                  &lt;li id='Fish steak' class="myListItem"&gt; Fish steak &lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;script&gt;
+                  const fauxConsole = document.getElementById("js-itemLog");
+                  document.querySelector(".myFaveList").addEventListener("click", function (e) {
+                  const itemName = e.target.innerText;
+                  console.log(itemName + " is clicked!");
+
+                  const myPElement = document.createElement("p");
+                  myPElement.innerText = `${foodName} was clicked!`;
+
+                  fauxConsole.append(myPElement);
+                  });
+              
+                &lt;/script&gt;
+            &lt;/body&gt;
+            </code>
+          </pre>
+        </div>
+        <hr>
+        <div id="delegation-div">
+          <div id="code-area">
+            <h3>HTML Sample</h3>
+            <hr>
+            <h2 id="myHeader">Favorite Food</h2>
+              <p> Today's Menu </p>
+              <ul class="myFaveList">              
+                <li id='pasta' class="myFave"> Pasta</li>
+                <li id='chicken' class="myFave"> Chicken </li>
+                <li id='fishSteak' class="myFave"> Fish steak </li>
+              </ul>
+          </div>
+          <div id="pesudo-console">
+            <h3>Pseudo Console</h3>
+            <hr>
+            <div>
+              <p id="js-itemLog"></p>
+            </div>
+            
+          </div>
+
+          
+          
+        </div>
+        <p><strong>NOTES</strong></p>
+          <p>The same as the order objects, we use the <em>Event Object (e)</em> to manipulate the DOM. The event object handles all the event that happens whether it is hover, clicked, keypress etc.</p>
+          <p>To find out more about the event object, click <em><a href="https://www.w3schools.com/jsreF/obj_event.asp">here</a></em>.</p>
+      </div>
+      <!-- scrollIntoView -->
+      <div class="card scrollIntoView">
+        <h3>Event Delegation in Action</h3>
+        <p>The code that actually makes the page scroll on the specific content when you click the topic in the sidebar was actually made using event delegation and the method <em><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView">.scrollIntoView</a></em></p>
+        <hr>
+        <div class="code-block">
+          <pre>
+            <code class="language-javascript">
+                &lt;script&gt;
+                  document.querySelector("#lesson-list").addEventListener("click", (e) => {
+                  const idName = e.target.getAttribute("id");
+                  const mainDivs = document.querySelector("main").children;
+
+                  for (let div of mainDivs) {
+                    if (div.classList.contains(idName)) {
+                      div.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
+                    }
+                  }
+                });
+                &lt;/script&gt;
+            
+            </code>
+          </pre>
+        </div>
+        <p>The algorithm is as follows:</p>
+          <ol>
+            <li>
+              Select the parent element that contains all the topics in the sidebar.  
+              In this case, it is <em>#lesson-list</em>.
+            </li>
+            <li>
+              Attach a <em>click</em> event listener to this parent element.
+            </li>
+            <li>
+              Pass the event object <code>e</code> into the callback function to access information about the triggered event.
+            </li>
+            <li>
+              Retrieve the <em>id</em> of the element that was clicked using <code>e.target</code>, and store it in the variable <em>idName</em>.
+            </li>
+            <li>
+              Select all child elements inside the <em>main</em> element and store them in <em>mainDivs</em>.  
+              These represent the content sections.
+            </li>
+            <li>
+              Loop through <em>mainDivs</em> using a <em>for...of</em> loop.  
+              For each element, check if its class matches <em>idName</em>.
+            </li>
+            <li>
+              If a match is found, call <code>scrollIntoView()</code> to smoothly scroll to the corresponding section.
+            </li>
+          </ol>
+      </div>
+      <!-- intersectionObserver -->
+      <div class="card intersectionObserver">
+        <h3>Intersection Observer API</h3>
+        <p>What if there is a way to track when an element enters the screen? That way, we can attach animations the moment it does enter the screen and leave outside of the screen. Introducting <em><a href="https://www.geeksforgeeks.org/javascript/introduction-to-intersection-observer/">Intersection Observer API</a></em></p>
+        <p>Notice that when you scroll, the <em>cards</em> slides from the left and stays at that position and slides out when it exits the screen. This is made using that API.</p>
+        <hr>
+        <div class="code-block">
+          <pre>
+            <code class="language-javascript">
+                &lt;script&gt;
+                  const cards = document.querySelectorAll(".card");
+
+                  const cardObserver = new IntersectionObserver(
+                    function (entries) {
+                      entries.forEach((entry) => {
+                        entry.target.classList.toggle("show", entry.isIntersecting);
+                      });
+                    },
+                    { threshold: 0.07 },
+                  );
+
+                  cards.forEach((card) => {
+                    cardObserver.observe(card);
+                  });
+                &lt;/script&gt;
+            </code>
+          </pre>
+        </div>
+        <p>WIP: The algorithm is as follows:</p>
+          <ol>
+            <li>
+              Select the parent element that contains all the topics in the sidebar.  
+              In this case, it is <em>#lesson-list</em>.
+            </li>
+            <li>
+              Attach a <em>click</em> event listener to this parent element.
+            </li>
+            <li>
+              Pass the event object <code>e</code> into the callback function to access information about the triggered event.
+            </li>
+            <li>
+              Retrieve the <em>id</em> of the element that was clicked using <code>e.target</code>, and store it in the variable <em>idName</em>.
+            </li>
+            <li>
+              Select all child elements inside the <em>main</em> element and store them in <em>mainDivs</em>.  
+              These represent the content sections.
+            </li>
+            <li>
+              Loop through <em>mainDivs</em> using a <em>for...of</em> loop.  
+              For each element, check if its class matches <em>idName</em>.
+            </li>
+            <li>
+              If a match is found, call <code>scrollIntoView()</code> to smoothly scroll to the corresponding section.
+            </li>
+          </ol>
+      </div> 
+      <!-- sample projects -->
+      <div class="sample-projects">
+        <h2>Sample Projects</h2>
+        <hr>
+       
+      </div>
+      <!-- read more -->
+      <div class="read-more">
+         <h3>Read more...</h3>
+         <hr>
+         <p>Remember those websites that if you want to read the full document or article, you should clicke the <em>'read more...'</em> button? Well that is javacript in action.</p>
+
+        <div class="code-block">
+          <pre>
+            <code class="language-javascript">
+               &lt;div class="article-container"&gt;
+                  &lt;p&gt;This is an article.&lt;/p&gt;
+                  &lt;p&gt; class="js-article"&gt;Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus temporibus reprehenderit inventore earum ab repellat magnam officia voluptas, architecto facilis repellendus similique iste voluptatem explicabo voluptates soluta aspernatur! Temporibus voluptas sapiente, aliquid voluptates aspernatur fugiat beatae quidem odit, delectus quia doloribus quo consectetur et, error natus? Ad necessitatibus itaque cupiditate perferendis! Molestias delectus quidem cum nisi pariatur distinctio, ex labore itaque reiciendis accusantium a placeat quia voluptatem, magni dignissimos perspiciatis? Quibusdam consequatur ullam amet, iure quisquam aliquid quas velit inventore fugiat dolorum necessitatibus officiis tenetur veniam accusantium mollitia labore nihil!&lt;/p&gt;&lt;button&gt; class="js-readMore-btn"&gt;Read more&lt;/button&gt;
+                &lt;/div&gt;
+                &lt;script&gt;
+                  const articleOne = document.querySelector(".js-article");
+                  const articleOneBtn = document.querySelector(".js-readMore-btn");
+
+                  articleOneBtn.addEventListener("click", () => {
+                    articleOne.classList.toggle(
+                    "expandArticle",
+                    !articleOne.classList.contains("expandArticle"),
+                    );
+                    if (articleOne.classList.contains("expandArticle")) {
+                    articleOneBtn.innerText = "Read less";
+                    } else {
+                    articleOneBtn.innerText = "Read more";
+                    }
+                  });
+                &lt;/script&gt;
+              </code>
+            </pre>
+        </div><hr>
+
+        <div class="article-container">
+          <p>This is an article.</p>
+          <p class="js-article">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus temporibus reprehenderit inventore earum ab repellat magnam officia voluptas, architecto facilis repellendus similique iste voluptatem explicabo voluptates soluta aspernatur! Temporibus voluptas sapiente, aliquid voluptates aspernatur fugiat beatae quidem odit, delectus quia doloribus quo consectetur et, error natus? Ad necessitatibus itaque cupiditate perferendis! Molestias delectus quidem cum nisi pariatur distinctio, ex labore itaque reiciendis accusantium a placeat quia voluptatem, magni dignissimos perspiciatis? Quibusdam consequatur ullam amet, iure quisquam aliquid quas velit inventore fugiat dolorum necessitatibus officiis tenetur veniam accusantium mollitia labore nihil!</p><button class="js-readMore-btn">Read more</button>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

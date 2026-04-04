@@ -1,0 +1,97 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-image: url(https://w0.peakpx.com/wallpaper/220/922/HD-wallpaper-the-time-is-now-blue-hourglass-time-is-running-out.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+main {
+  min-width: 40vw;
+  min-height: 30vh;
+  background-color: rgba(245, 245, 220, 0.8);
+  backdrop-filter: blur(20px);
+  border-radius: 2rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  font-family: "Noto sans";
+  box-shadow: 0 0 10px white;
+
+  .timer {
+    display: flex;
+    flex: 3;
+    font-size: 4rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .button-container {
+    display: flex;
+    gap: 1rem;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+
+    button {
+      border: none;
+      height: 50px;
+      width: 50px;
+      padding: 0.4rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: 200ms ease-in-out;
+    }
+    button:hover {
+      transform: scale(1.1);
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    i {
+      font-size: 1.5rem;
+    }
+
+    .startBtn {
+      background-color: green;
+    }
+
+    .startBtn.pauseBtn {
+      background-color: rgb(241, 241, 57);
+    }
+
+    .resetBtn {
+      background-color: red;
+    }
+
+    i.active {
+      animation-name: rotateButton;
+      animation-duration: 1s;
+      animation-timing-function: ease-in-out;
+    }
+  }
+}
+
+/* when using keyframes, it cannot handle if it has a transition and animation. You can only apply one animation or transition per element. So the solution is to wrap that element to another container so that element will handle one transtion and another will handle one element */
+
+@keyframes rotateButton {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}

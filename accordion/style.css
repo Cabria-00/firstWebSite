@@ -1,0 +1,82 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-image: url(./src/wallpaper.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Roboto, monospace;
+}
+
+main {
+  width: 50vw;
+  min-height: fit-content;
+  background-color: rgba(250, 235, 215, 0.3);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 2rem;
+  box-shadow: 0 0 10px gray;
+
+  h2 {
+    text-align: center;
+  }
+
+  ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    li {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 4px;
+
+      div {
+        cursor: pointer;
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 1rem;
+        transition: 200ms ease-in-out;
+        border-radius: 1rem;
+
+        p {
+          flex: 1;
+          padding: 0.5rem;
+        }
+
+        span {
+          font-weight: bold;
+        }
+      }
+
+      div:hover {
+        background-color: rgba(169, 169, 169, 0.404);
+      }
+
+      p.question-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: 400ms ease-in-out;
+        padding: 0.2rem 1rem;
+      }
+
+      p.question-answer.show {
+        max-height: 200px;
+      }
+    }
+  }
+}
