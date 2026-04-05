@@ -1,0 +1,156 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  min-width: 100vw;
+  background-image: url(https://c4.wallpaperflare.com/wallpaper/264/558/535/busy-coffee-computer-corporate-wallpaper-preview.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+
+  font-family: "Noto sans", Helvetica, sans-serif;
+}
+
+/* general styling */
+.card {
+  background-color: hsla(0, 0%, 100%, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 1rem;
+  border-radius: 1rem;
+  min-width: 30vw;
+
+  font-size: 1.4rem;
+
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.753);
+
+  display: flex;
+  gap: 0.5rem;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+}
+
+section div:not(:last-child) {
+  border-bottom: 1px solid black;
+}
+
+input {
+  height: 2rem;
+  border-radius: 1rem;
+  padding-left: 1rem;
+}
+
+button {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 0.7rem;
+  border: none;
+  font-size: 1.4rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
+
+.dialog {
+  font-size: 1rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: none;
+  position: fixed;
+  top: 100px;
+  right: 10px;
+  background-color: white;
+  display: none;
+  box-shadow: 1px 1px 10px whitesmoke;
+}
+
+.showDialog {
+  right: -300px;
+  animation-name: dialogSlideInNOut;
+  animation-duration: 3s;
+  animation-timing-function: ease-in-out;
+  display: block;
+}
+
+@keyframes dialogSlideInNOut {
+  0% {
+    right: -200px;
+  }
+  20% {
+    right: 10px; /*slides in*/
+  }
+  90% {
+    right: 10px; /*stay*/
+  }
+  100% {
+    right: -200px;
+  }
+}
+
+i {
+  pointer-events: none;
+}
+
+.task-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  padding: 0.4rem;
+}
+
+/* specific styling */
+
+.inputField {
+  flex: 6;
+  outline-color: rgb(137, 221, 137);
+  background-color: hsla(0, 0%, 100%, 0.6);
+  border: none;
+}
+
+.addBtn,
+.task-added,
+.task-completed {
+  flex: 1;
+  background-color: rgb(137, 221, 137);
+}
+
+.task {
+  flex: 5;
+}
+
+.completeBtn,
+.deleteBtn {
+  flex: 1;
+}
+
+.completeBtn,
+.no-task-input,
+.task-unchecked {
+  background-color: rgb(236, 236, 116);
+}
+
+.deleteBtn,
+.task-deleted {
+  background-color: rgba(253, 62, 62, 0.815);
+}
+
+.strike {
+  text-decoration: line-through;
+}

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To do list</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Noto+Sans+Linear+A:regular"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+  </head>
+  <body>
+    <main class="card">
+      <input
+        type="text"
+        class="inputField"
+        id="js-input-field"
+        placeholder="Type a task"
+      />
+      <button class="addBtn">
+        <i class="fa fa-plus-square-o"></i>
+      </button>
+    </main>
+    <section class="card">
+      <!-- <div class="task-container">
+        <p class="task">task goes here</p>
+        <button class="completeBtn" id="js-completed-btn">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button class="deleteBtn" id="js-delete-btn">
+          <i class="fa fa-trash-o"></i>
+        </button>
+      </div> -->
+    </section>
+
+    <!-- dialogs -->
+    <div class="dialog no-task-input">
+      <p>Please type some task!</p>
+    </div>
+    <div class="dialog task-completed">
+      <p>Task marked as completed!</p>
+    </div>
+    <div class="dialog task-deleted">
+      <p>Task succesfully deleted!</p>
+    </div>
+    <div class="dialog task-added">
+      <p>Task Added!</p>
+    </div>
+    <div class="dialog task-unchecked">
+      <p>Task marked as not completed!</p>
+    </div>
+  </body>
+</html>
