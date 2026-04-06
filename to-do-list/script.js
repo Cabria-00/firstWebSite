@@ -104,7 +104,6 @@ addButton.addEventListener("click", function () {
 
 inputField.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
-    console.log(e.key);
     if (inputField.value === "") {
       errorDialog.classList.add("showDialog");
       window.setTimeout(() => {
@@ -167,7 +166,6 @@ inputField.addEventListener("keydown", function (e) {
 
 dateField.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
-    console.log(e.key);
     if (inputField.value === "") {
       errorDialog.classList.add("showDialog");
       window.setTimeout(() => {
@@ -271,9 +269,12 @@ taskField.addEventListener("click", (e) => {
     const divContent = parentDiv.querySelector(".task").innerText;
 
     // remove the item from the task array
-    tasks = tasks.filter((task) => {
+    let filteredTasks = tasks.filter((task) => {
       task.taskName !== divContent;
+      console.log(task.taskName);
     });
+    tasks = filteredTasks;
+    console.log(tasks);
 
     //remove the task from the display
     taskField.removeChild(parentDiv);
@@ -322,5 +323,4 @@ taskField.addEventListener("click", (e) => {
       localStorage.setItem("listOfTasks", JSON.stringify(tasks));
     }
   }
-  console.log(tasks);
 });
