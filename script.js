@@ -1,167 +1,260 @@
-const cards = document.querySelectorAll(".card");
+// html element to js object
+const addButton = document.querySelector(".addBtn");
+const inputField = document.querySelector("#js-input-field");
+const dateField = document.querySelector("#js-datePicker");
+console.log(dateField.value);
+const taskField = document.querySelector("section");
+const errorDialog = document.querySelector(".no-task-input");
+const completeDialog = document.querySelector(".task-completed");
+const deleteDialog = document.querySelector(".task-deleted");
+const addDialog = document.querySelector(".task-added");
+const uncheckedDialog = document.querySelector(".task-unchecked");
 
-const lessonList = document.querySelector("#lesson-list li");
-console.log(lessonList);
+// task class blueprint
+class Task {
+  constructor(taskName, targetDate) {
+    this.taskName = taskName;
+    this.targetDate = targetDate;
+    this.isCompleted = false;
+  }
 
-const cardObserver = new IntersectionObserver(
-  function (entries) {
-    entries.forEach((entry) => {
-      entry.target.classList.toggle("show", entry.isIntersecting);
-    });
-  },
-  { threshold: 0.07 },
-);
+  // get taskName() {
+  //   return this._taskName;
+  // }
 
-cards.forEach((card) => {
-  cardObserver.observe(card);
-});
+  // get targetDate() {
+  //   return this._targetDate;
+  // }
 
-console.log(cards);
+  // get isCompleted() {
+  //   return this._isCompleted;
+  // }
 
-const footerSpan = document.getElementById("js-footer-span");
+  // set isCompleted(newStatus) {
+  //   this._isCompleted = newStatus;
+  // }
+}
+// task storage
+let tasks = JSON.parse(localStorage.getItem("listOfTasks")) || [];
 
-footerSpan.textContent = new Date().getUTCFullYear();
+//Initial rendering of task
+taskRendering(tasks);
 
-const fourthShowAnswerButton = document.querySelector("#toggle-fourth-answer");
-const fourthAnswer = document.querySelector("#question-four-answer");
+// getting the added  task
 
-fourthShowAnswerButton.addEventListener("click", () => {
-  fourthAnswer.classList.toggle("hidden");
-  fourthAnswer.classList.contains("hidden")
-    ? (fourthShowAnswerButton.innerText = "Show Answer")
-    : (fourthShowAnswerButton.innerText = "Hide Answer");
-});
-
-const showAlert = document.querySelector(".show-alert-btn");
-const showConfirm = document.querySelector(".show-confirm-btn");
-const showPrompt = document.querySelector(".show-prompt-btn");
-
-const inputAlert = document.querySelector(".alert-input");
-const inputConfirm = document.querySelector(".confirm-input");
-const inputPrompt = document.querySelector(".prompt-input");
-
-// showAlert
-showAlert.addEventListener("click", (e) => {
-  e.preventDefault();
-  inputAlert.value === ""
-    ? alert(`The user is quiet`)
-    : alert(`The user says ${inputAlert.value}`);
-  inputAlert.value = "";
-});
-// showConfirm
-showConfirm.addEventListener("click", (e) => {
-  e.preventDefault();
-  const answer = confirm("Do you understand the lesson so far?");
-  if (answer) {
-    inputConfirm.value = "Nice 😎";
-    setTimeout(() => {
-      inputConfirm.value = "";
+addButton.addEventListener("click", function () {
+  if (inputField.value === "") {
+    errorDialog.classList.add("showDialog");
+    window.setTimeout(() => {
+      errorDialog.classList.remove("showDialog");
     }, 3000);
   } else {
-    inputConfirm.value = "Hmm... we'll fix that 😏";
-    setTimeout(() => {
-      inputConfirm.value = "";
+    tasks.push(
+      new Task(
+        inputField.value,
+        dateField.value || new Date().toISOString().split("T")[0],
+      ),
+    );
+    addDialog.classList.add("showDialog");
+    window.setTimeout(() => {
+      addDialog.classList.remove("showDialog");
     }, 3000);
+
+    // displaying new task
+
+    // creating elements
+    const taskDiv = document.createElement("div");
+    const taskP = document.createElement("p");
+    const taskDateP = document.createElement("p");
+    const taskCompleteBtn = document.createElement("button");
+    const taskDeleteBtn = document.createElement("button");
+
+    // append
+    taskField.appendChild(taskDiv);
+    taskDiv.appendChild(taskP);
+    taskDiv.appendChild(taskDateP);
+    taskDiv.appendChild(taskCompleteBtn);
+    taskDiv.appendChild(taskDeleteBtn);
+
+    // adding attributes
+    taskDiv.classList.add("task-container");
+    taskDiv.dataset.id = tasks.length;
+    taskP.classList.add("task");
+    taskCompleteBtn.classList.add("completeBtn");
+    taskCompleteBtn.setAttribute("id", "js-completed-btn");
+    taskDeleteBtn.classList.add("deleteBtn");
+    taskDeleteBtn.setAttribute("id", "js-delete-btn");
+
+    // assiding values
+    taskP.innerText = inputField.value;
+    taskDateP.textContent = dateField.value;
+    taskCompleteBtn.innerHTML = `<i class="fa fa-edit"></i>`;
+    taskDeleteBtn.innerHTML = `<i class="fa fa-trash-o"></i>`;
+
+    // saving to localStorage
+    localStorage.setItem("listOfTasks", JSON.stringify(tasks));
+
+    // clearning input field
+    inputField.value = "";
+    dateField.value = "";
   }
 });
 
-showPrompt.addEventListener("click", (e) => {
-  e.preventDefault();
-  const answer = prompt(`Do you have something to say?`).trim();
-  answer === ""
-    ? (inputPrompt.value = `The user says nothing.`)
-    : (inputPrompt.value = `The user is saying: ${answer}`);
-  setTimeout(() => {
-    inputPrompt.value = "";
-  }, 3000);
-});
+inputField.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    if (inputField.value === "") {
+      errorDialog.classList.add("showDialog");
+      window.setTimeout(() => {
+        errorDialog.classList.remove("showDialog");
+      }, 3000);
+    } else {
+      tasks.push(
+        new Task(
+          inputField.value,
+          dateField.value || new Date().toISOString().split("T")[0],
+        ),
+      );
+      addDialog.classList.add("showDialog");
+      window.setTimeout(() => {
+        addDialog.classList.remove("showDialog");
+      }, 3000);
 
-// addEventListener
+      // displaying new task
 
-const clickEventBtn = document.querySelector(".clickEvent-btn");
+      // creating elements
+      const taskDiv = document.createElement("div");
+      const taskP = document.createElement("p");
+      const taskDateP = document.createElement("p");
+      const taskCompleteBtn = document.createElement("button");
+      const taskDeleteBtn = document.createElement("button");
 
-function changeButtonColor() {
-  const set1 = Math.floor(Math.random() * 255);
-  const set2 = Math.floor(Math.random() * 255);
-  const set3 = Math.floor(Math.random() * 255);
+      // append
+      taskField.appendChild(taskDiv);
+      taskDiv.appendChild(taskP);
+      taskDiv.appendChild(taskDateP);
+      taskDiv.appendChild(taskCompleteBtn);
+      taskDiv.appendChild(taskDeleteBtn);
 
-  const color = `rgb(${set1},${set2},${set3})`;
-  console.log(color);
+      // adding attributes
+      taskDiv.classList.add("task-container");
+      taskDiv.dataset.id = tasks.length;
+      taskP.classList.add("task");
+      taskCompleteBtn.classList.add("completeBtn");
+      taskCompleteBtn.setAttribute("id", "js-completed-btn");
+      taskDeleteBtn.classList.add("deleteBtn");
+      taskDeleteBtn.setAttribute("id", "js-delete-btn");
 
-  clickEventBtn.style.backgroundColor = color;
-}
+      // assiding values
+      taskP.innerText = inputField.value;
+      taskDateP.textContent =
+        dateField.value || new Date().toISOString().split("T")[0];
+      taskCompleteBtn.innerHTML = `<i class="fa fa-edit"></i>`;
+      taskDeleteBtn.innerHTML = `<i class="fa fa-trash-o"></i>`;
 
-clickEventBtn.addEventListener("click", (e) => {
-  changeButtonColor();
-});
+      // saving to localStorage
+      localStorage.setItem("listOfTasks", JSON.stringify(tasks));
 
-// hover
-const hoverEventBtn = document.querySelector(".hoverEvent-btn");
-const addMessageField = document.querySelector(".add-message");
-const addMessageBtn = document.querySelector(".js-add-message");
-
-const message = [
-  "Hi!",
-  "Good Morning!",
-  "おはようございます!",
-  " がんばれ!",
-  "Take a break!",
-];
-
-function addMessage() {
-  const newMessage = addMessageField.value;
-  if (newMessage) {
-    message.push(newMessage);
-    addMessageField.value = "";
-  }
-}
-
-addMessageBtn.addEventListener("click", addMessage);
-
-function changeButtonMessage() {
-  const set1 = Math.floor(Math.random() * message.length);
-  console.log(set1);
-
-  hoverEventBtn.textContent = message[set1];
-}
-
-hoverEventBtn.addEventListener("mouseover", changeButtonMessage);
-hoverEventBtn.addEventListener("click", changeButtonMessage);
-
-const fauxConsole = document.getElementById("js-itemLog");
-document.querySelector(".myFaveList").addEventListener("click", function (e) {
-  const foodName = e.target.innerText;
-  console.log(foodName + " is clicked!");
-
-  const myPElement = document.createElement("p");
-  myPElement.innerText = `${foodName} was clicked!`;
-
-  fauxConsole.append(myPElement);
-});
-
-document.querySelector("#lesson-list").addEventListener("click", (e) => {
-  const idName = e.target.getAttribute("id");
-  const mainDivs = document.querySelector("main").children;
-
-  for (let div of mainDivs) {
-    if (div.classList.contains(idName)) {
-      div.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      // clearning input field
+      inputField.value = "";
+      dateField.value = "";
     }
   }
 });
 
-const articleOne = document.querySelector(".js-article");
-const articleOneBtn = document.querySelector(".js-readMore-btn");
+function taskRendering(paramArray) {
+  paramArray.forEach((task, index) => {
+    // creating elements
+    const taskDiv = document.createElement("div");
+    const taskP = document.createElement("p");
+    const taskDateP = document.createElement("p");
+    const taskCompleteBtn = document.createElement("button");
+    const taskDeleteBtn = document.createElement("button");
 
-articleOneBtn.addEventListener("click", () => {
-  articleOne.classList.toggle(
-    "expandArticle",
-    !articleOne.classList.contains("expandArticle"),
-  );
-  articleOne.classList.contains("expandArticle")
-    ? (articleOneBtn.innerText = "Read less")
-    : (articleOneBtn.innerText = "Read more");
+    // append
+    taskField.appendChild(taskDiv);
+    taskDiv.appendChild(taskP);
+    taskDiv.appendChild(taskDateP);
+    taskDiv.appendChild(taskCompleteBtn);
+    taskDiv.appendChild(taskDeleteBtn);
+
+    // adding attributes
+    taskDiv.classList.add("task-container");
+    taskDiv.dataset.id = index;
+    taskP.classList.add("task");
+    taskCompleteBtn.classList.add("completeBtn");
+    taskCompleteBtn.setAttribute("id", "js-completed-btn");
+    taskDeleteBtn.classList.add("deleteBtn");
+    taskDeleteBtn.setAttribute("id", "js-delete-btn");
+
+    // assiding values
+    taskP.innerText = tasks[index].taskName;
+    taskDateP.innerText = tasks[index].targetDate;
+    taskCompleteBtn.innerHTML = `<i class="fa fa-edit"></i>`;
+    taskDeleteBtn.innerHTML = `<i class="fa fa-trash-o"></i>`;
+  });
+}
+
+taskField.addEventListener("click", (e) => {
+  const targetBtn = e.target;
+  const taskText = targetBtn.closest("div").querySelector("p");
+  const targetBtnDataSet = e.target.closest("div").dataset.id;
+
+  if (targetBtn.classList.contains("deleteBtn")) {
+    const parentDiv = e.target.closest("div");
+    const divContent = parentDiv.querySelector(".task").innerText;
+    console.log(divContent);
+
+    // remove the item from the task array
+    tasks = tasks.filter((task) => {
+      task.taskName !== divContent;
+    });
+
+    //remove the task from the display
+    taskField.removeChild(parentDiv);
+
+    //show dialog
+    deleteDialog.classList.add("showDialog");
+
+    //remove dialog after 3 sec
+    window.setTimeout(() => {
+      deleteDialog.classList.remove("showDialog");
+    }, 3000);
+
+    // saving to localStorage
+    localStorage.setItem("listOfTasks", JSON.stringify(tasks));
+  } else if (targetBtn.classList.contains("completeBtn")) {
+    if (taskText.classList.contains("strike")) {
+      // setting isCompleted to false
+      tasks[targetBtnDataSet].isCompleted = false;
+
+      //remove strike-through
+      taskText.classList.remove("strike");
+
+      //show dialog
+      uncheckedDialog.classList.add("showDialog");
+
+      //remove dialog after 3 sec
+      window.setTimeout(() => {
+        uncheckedDialog.classList.remove("showDialog");
+      }, 3000);
+    } else {
+      // setting isCompleted to true
+      tasks[targetBtnDataSet].isCompleted = true;
+
+      // adding strike-through
+      taskText.classList.add("strike");
+
+      // show dialog
+      completeDialog.classList.add("showDialog");
+
+      // remove dialog after 3s
+      window.setTimeout(() => {
+        completeDialog.classList.remove("showDialog");
+      }, 3000);
+
+      // saving to localStorage
+      localStorage.setItem("listOfTasks", JSON.stringify(tasks));
+    }
+  }
+  console.log(tasks);
 });
