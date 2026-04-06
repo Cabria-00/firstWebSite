@@ -99,10 +99,12 @@ addButton.addEventListener("click", function () {
     inputField.value = "";
     dateField.value = "";
   }
+  console.log(tasks);
 });
 
 inputField.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
+    console.log(e.key);
     if (inputField.value === "") {
       errorDialog.classList.add("showDialog");
       window.setTimeout(() => {
@@ -160,6 +162,70 @@ inputField.addEventListener("keydown", function (e) {
       dateField.value = "";
     }
   }
+  console.log(tasks);
+});
+
+dateField.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    console.log(e.key);
+    if (inputField.value === "") {
+      errorDialog.classList.add("showDialog");
+      window.setTimeout(() => {
+        errorDialog.classList.remove("showDialog");
+      }, 3000);
+    } else {
+      tasks.push(
+        new Task(
+          inputField.value,
+          dateField.value || new Date().toISOString().split("T")[0],
+        ),
+      );
+      addDialog.classList.add("showDialog");
+      window.setTimeout(() => {
+        addDialog.classList.remove("showDialog");
+      }, 3000);
+
+      // displaying new task
+
+      // creating elements
+      const taskDiv = document.createElement("div");
+      const taskP = document.createElement("p");
+      const taskDateP = document.createElement("p");
+      const taskCompleteBtn = document.createElement("button");
+      const taskDeleteBtn = document.createElement("button");
+
+      // append
+      taskField.appendChild(taskDiv);
+      taskDiv.appendChild(taskP);
+      taskDiv.appendChild(taskDateP);
+      taskDiv.appendChild(taskCompleteBtn);
+      taskDiv.appendChild(taskDeleteBtn);
+
+      // adding attributes
+      taskDiv.classList.add("task-container");
+      taskDiv.dataset.id = tasks.length;
+      taskP.classList.add("task");
+      taskCompleteBtn.classList.add("completeBtn");
+      taskCompleteBtn.setAttribute("id", "js-completed-btn");
+      taskDeleteBtn.classList.add("deleteBtn");
+      taskDeleteBtn.setAttribute("id", "js-delete-btn");
+
+      // assiding values
+      taskP.innerText = inputField.value;
+      taskDateP.textContent =
+        dateField.value || new Date().toISOString().split("T")[0];
+      taskCompleteBtn.innerHTML = `<i class="fa fa-edit"></i>`;
+      taskDeleteBtn.innerHTML = `<i class="fa fa-trash-o"></i>`;
+
+      // saving to localStorage
+      localStorage.setItem("listOfTasks", JSON.stringify(tasks));
+
+      // clearning input field
+      inputField.value = "";
+      dateField.value = "";
+    }
+  }
+  console.log(tasks);
 });
 
 function taskRendering(paramArray) {
@@ -203,11 +269,11 @@ taskField.addEventListener("click", (e) => {
   if (targetBtn.classList.contains("deleteBtn")) {
     const parentDiv = e.target.closest("div");
     const divContent = parentDiv.querySelector(".task").innerText;
-    console.log(divContent);
 
     // remove the item from the task array
     tasks = tasks.filter((task) => {
       task.taskName !== divContent;
+      console.log(task);
     });
 
     //remove the task from the display
