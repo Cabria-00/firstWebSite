@@ -87,7 +87,8 @@ addButton.addEventListener("click", function () {
 
     // assiding values
     taskP.innerText = inputField.value;
-    taskDateP.textContent = dateField.value;
+    taskDateP.textContent =
+      dateField.value || new Date().toISOString().split("T")[0];
     taskCompleteBtn.innerHTML = `<i class="fa fa-edit"></i>`;
     taskDeleteBtn.innerHTML = `<i class="fa fa-trash-o"></i>`;
 
