@@ -273,7 +273,6 @@ taskField.addEventListener("click", (e) => {
     // remove the item from the task array
     tasks = tasks.filter((task) => {
       task.taskName !== divContent;
-      console.log(task);
     });
 
     //remove the task from the display
