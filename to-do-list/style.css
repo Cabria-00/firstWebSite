@@ -52,6 +52,11 @@ input {
   padding-left: 1rem;
 }
 
+input[type="date"] {
+  padding: 0 1rem;
+  flex: 1;
+}
+
 button {
   height: 2rem;
   width: 2rem;
