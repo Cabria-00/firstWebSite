@@ -34,6 +34,8 @@ pre code {
   word-break: break-word;
 }
 
+/* NAV */
+
 nav {
   display: flex;
   flex-direction: column;
@@ -81,7 +83,8 @@ ul > li {
   margin-left: 1rem;
 }
 
-/* main area */
+/* MAIN */
+
 main {
   padding: 1rem 0;
   margin-left: 350px;
@@ -117,6 +120,8 @@ main {
   background-color: red;
 }
 
+/* LESSON ONE */
+
 #lesson-one-div {
   display: flex;
 }
@@ -132,7 +137,8 @@ main {
   height: 300px;
 }
 
-/* fourth answer toggle */
+/* LESSON FOUR */
+
 .toggle-fourth-answer {
   transition: 200ms ease-in-out;
 }
@@ -164,6 +170,8 @@ main {
 .hidden {
   display: none;
 }
+
+/* BUTTON GROUP */
 
 .set-btn-one {
   display: flex;
@@ -199,6 +207,8 @@ main {
   padding: 6px;
 }
 
+/* EVENTS */
+
 .clickEvent-btn,
 .hoverEvent-btn {
   width: 100px;
@@ -214,6 +224,8 @@ main {
   transform: scale(0.95);
 }
 
+/* DELEGATION */
+
 #delegation-div {
   background-color: lightgrey;
   border-radius: 1rem;
@@ -227,20 +239,22 @@ main {
   margin-bottom: 10px;
 }
 
-#code-area {
+#delegation-div #code-area {
   background-color: rgba(0, 0, 0, 0.801);
   color: white;
   padding: 1rem;
   border-radius: 1rem;
 }
 
-#pesudo-console {
+#delegation-div #pesudo-console {
   background-color: antiquewhite;
   padding: 0.5rem;
   border-radius: 1rem;
   overflow-y: scroll;
   height: 200px;
 }
+
+/* ARTICLE */
 
 .js-article {
   height: 50px;
