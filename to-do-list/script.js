@@ -40,7 +40,6 @@ let tasks = JSON.parse(localStorage.getItem("listOfTasks")) || [];
 
 //Initial rendering of task
 taskRendering(tasks);
-console.log(document.querySelectorAll(".dialog")[0]);
 
 function showDialog(dialogType, timer = 3000) {
   document.querySelectorAll(".dialog").forEach((dialog) => {
@@ -67,7 +66,7 @@ function addTask() {
     showDialog(addDialog);
 
     // saving to localStorage
-    localStorage.setItem("listOfTasks", JSON.stringify(tasks));
+    save();
 
     //re-rendering of task to the display
     taskRendering(tasks);
@@ -117,7 +116,6 @@ function taskRendering(paramArray) {
     taskCompleteBtn.innerHTML = `<i class="fa fa-edit"></i>`;
     taskDeleteBtn.innerHTML = `<i class="fa fa-trash-o"></i>`;
   });
-  localStorage.setItem("listOfTasks", JSON.stringify(tasks));
 }
 
 function deleteTask(param1) {
@@ -126,14 +124,13 @@ function deleteTask(param1) {
 
   // this returns an array wih remove content
   tasks.splice(param1, 1);
-  console.log(tasks);
   taskRendering(tasks);
 
   //show/remove dialog
   showDialog(deleteDialog);
 
   // saving to localStorage
-  localStorage.setItem("listOfTasks", JSON.stringify(tasks));
+  save();
 }
 
 function updateCompleteStatus(param1, param2) {
@@ -148,7 +145,7 @@ function updateCompleteStatus(param1, param2) {
     showDialog(uncheckedDialog);
 
     // saving to localStorage
-    localStorage.setItem("listOfTasks", JSON.stringify(tasks));
+    save();
   } else {
     // setting isCompleted to true
     tasks[param2].isCompleted = true;
@@ -159,8 +156,12 @@ function updateCompleteStatus(param1, param2) {
     // show dialog
     showDialog(completeDialog);
     // saving to localStorage
-    localStorage.setItem("listOfTasks", JSON.stringify(tasks));
+    save();
   }
+}
+
+function save() {
+  localStorage.setItem("listOfTasks", JSON.stringify(tasks));
 }
 
 addButton.addEventListener("click", addTask);
@@ -173,7 +174,7 @@ inputField.addEventListener("keydown", function (e) {
 
 dateField.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
-    addTask;
+    addTask();
   }
 });
 
