@@ -40,9 +40,15 @@ let tasks = JSON.parse(localStorage.getItem("listOfTasks")) || [];
 
 //Initial rendering of task
 taskRendering(tasks);
+console.log(document.querySelectorAll(".dialog")[0]);
 
 function showDialog(dialogType, timer = 3000) {
+  document.querySelectorAll(".dialog").forEach((dialog) => {
+    dialog.classList.remove("showDialog");
+  });
+
   dialogType.classList.add("showDialog");
+
   window.setTimeout(() => {
     dialogType.classList.remove("showDialog");
   }, timer);
@@ -114,6 +120,49 @@ function taskRendering(paramArray) {
   localStorage.setItem("listOfTasks", JSON.stringify(tasks));
 }
 
+function deleteTask(param1) {
+  // remove the item from the task array
+  // Note:for arrow functions, if it is inside a curly braces, put "return", if not, no need to put one.
+
+  // this returns an array wih remove content
+  tasks.splice(param1, 1);
+  console.log(tasks);
+  taskRendering(tasks);
+
+  //show/remove dialog
+  showDialog(deleteDialog);
+
+  // saving to localStorage
+  localStorage.setItem("listOfTasks", JSON.stringify(tasks));
+}
+
+function updateCompleteStatus(param1, param2) {
+  if (param1.classList.contains("strike")) {
+    // setting isCompleted to false
+    tasks[param2].isCompleted = false;
+
+    //remove strike-through
+    param1.classList.remove("strike");
+
+    //show/remove dialog
+    showDialog(uncheckedDialog);
+
+    // saving to localStorage
+    localStorage.setItem("listOfTasks", JSON.stringify(tasks));
+  } else {
+    // setting isCompleted to true
+    tasks[param2].isCompleted = true;
+
+    // adding strike-through
+    param1.classList.add("strike");
+
+    // show dialog
+    showDialog(completeDialog);
+    // saving to localStorage
+    localStorage.setItem("listOfTasks", JSON.stringify(tasks));
+  }
+}
+
 addButton.addEventListener("click", addTask);
 
 inputField.addEventListener("keydown", function (e) {
@@ -129,49 +178,15 @@ dateField.addEventListener("keydown", function (e) {
 });
 
 taskField.addEventListener("click", (e) => {
+  // My brain cannot keep up with the logic, a simply explanation would be, I created a code that has not yet been turned in to a function. After seeing how messy it was, I decided to turn it into a function and passed all the arguments that are necessary for the code to run.
   const targetBtn = e.target;
   const parentDiv = e.target.closest(".task-container");
   const taskText = targetBtn.closest("div").querySelector("p");
   const targetBtnDataSet = targetBtn.closest("div").dataset.id;
 
   if (targetBtn.classList.contains("deleteBtn")) {
-    // remove the item from the task array
-    // Note:for arrow functions, if it is inside a curly braces, put "return", if not, no need to put one.
-
-    // this returns an array wih remove content
-    tasks.splice(targetBtnDataSet, 1);
-    console.log(tasks);
-    taskRendering(tasks);
-
-    //show/remove dialog
-    showDialog(deleteDialog);
-
-    // saving to localStorage
-    localStorage.setItem("listOfTasks", JSON.stringify(tasks));
+    deleteTask(targetBtnDataSet);
   } else if (targetBtn.classList.contains("completeBtn")) {
-    if (taskText.classList.contains("strike")) {
-      // setting isCompleted to false
-      tasks[targetBtnDataSet].isCompleted = false;
-
-      //remove strike-through
-      taskText.classList.remove("strike");
-
-      //show/remove dialog
-      showDialog(uncheckedDialog);
-
-      // saving to localStorage
-      localStorage.setItem("listOfTasks", JSON.stringify(tasks));
-    } else {
-      // setting isCompleted to true
-      tasks[targetBtnDataSet].isCompleted = true;
-
-      // adding strike-through
-      taskText.classList.add("strike");
-
-      // show dialog
-      showDialog(completeDialog);
-      // saving to localStorage
-      localStorage.setItem("listOfTasks", JSON.stringify(tasks));
-    }
+    updateCompleteStatus(taskText, targetBtnDataSet);
   }
 });
