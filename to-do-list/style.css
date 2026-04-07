@@ -40,6 +40,8 @@ body {
 section {
   display: flex;
   flex-direction: column;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
 }
 
 section div:not(:last-child) {
@@ -158,4 +160,28 @@ i {
 
 .strike {
   text-decoration: line-through;
+}
+
+div.header {
+  display: flex;
+  /* border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0; */
+  align-items: center;
+  margin-left: 0.5rem;
+}
+
+.task-name {
+  flex: 2;
+}
+.target-date {
+  flex: 1;
+}
+.option {
+  flex: 1;
+}
+
+.vr {
+  width: 2px;
+  height: 1rem;
+  margin-right: 1rem;
 }
