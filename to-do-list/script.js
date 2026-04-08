@@ -2,6 +2,7 @@
 const addButton = document.querySelector(".addBtn");
 const inputField = document.querySelector("#js-input-field");
 const dateField = document.querySelector("#js-datePicker");
+const assignmentMethod = document.querySelector("#js-task-assignment");
 const taskField = document.querySelector("section");
 const errorDialog = document.querySelector(".no-task-input");
 const completeDialog = document.querySelector(".task-completed");
@@ -9,12 +10,17 @@ const deleteDialog = document.querySelector(".task-deleted");
 const addDialog = document.querySelector(".task-added");
 const uncheckedDialog = document.querySelector(".task-unchecked");
 const main = document.querySelectorAll("main");
+const sidebar = document.querySelector("aside");
+const floatButton = document.querySelector(".float-container");
+const tables = document.querySelectorAll("table");
 
 // task class blueprint
 class Task {
-  constructor(taskName, targetDate) {
-    this.taskName = taskName;
-    this.targetDate = targetDate;
+  constructor(task, taskAssigment, shiftDate) {
+    this.task = task;
+    this.taskAssigment = taskAssigment || " - ";
+    this.shiftDate = shiftDate || new Date().toISOString().split("T")[0];
+    // this.taskNotes = taskNotes;
     this.isCompleted = false;
     this.taskCreateDate = new Date().toISOString().split("T")[0];
   }
@@ -23,7 +29,7 @@ class Task {
   //   return this._taskName;
   // }
 
-  // get targetDate() {
+  // get shiftDate() {
   //   return this._targetDate;
   // }
 
@@ -40,6 +46,9 @@ let tasks = JSON.parse(localStorage.getItem("listOfTasks")) || [];
 
 //Initial rendering of task
 taskRendering(tasks);
+
+// initial rendering of taskCount
+updateTaskCount();
 
 function showDialog(dialogType, timer = 3000) {
   document.querySelectorAll(".dialog").forEach((dialog) => {
@@ -58,10 +67,7 @@ function addTask() {
     showDialog(errorDialog);
   } else {
     tasks.push(
-      new Task(
-        inputField.value,
-        dateField.value || new Date().toISOString().split("T")[0],
-      ),
+      new Task(inputField.value, assignmentMethod.value, dateField.value),
     );
     showDialog(addDialog);
 
@@ -74,6 +80,10 @@ function addTask() {
     // clearning input field
     inputField.value = "";
     dateField.value = "";
+    assignmentMethod.selectedIndex = 0; // selectedIndex is the method to reset the option of the select element to the first index
+
+    // update task count
+    updateTaskCount();
   }
 }
 
@@ -84,14 +94,18 @@ function taskRendering(paramArray) {
   paramArray.forEach((task, index) => {
     // creating elements
     const taskDiv = document.createElement("div");
+    const taskInfoDiv = document.createElement("div");
     const taskP = document.createElement("p");
+    const taskAssignmentP = document.createElement("p");
     const taskDateP = document.createElement("p");
     const taskCompleteBtn = document.createElement("button");
     const taskDeleteBtn = document.createElement("button");
 
     // append
     taskField.appendChild(taskDiv);
-    taskDiv.appendChild(taskP);
+    taskDiv.appendChild(taskInfoDiv);
+    taskInfoDiv.appendChild(taskP);
+    taskInfoDiv.appendChild(taskAssignmentP);
     taskDiv.appendChild(taskDateP);
     taskDiv.appendChild(taskCompleteBtn);
     taskDiv.appendChild(taskDeleteBtn);
@@ -99,31 +113,38 @@ function taskRendering(paramArray) {
     // adding attributes
     taskDiv.classList.add("task-container");
     taskDiv.dataset.id = index;
+    taskInfoDiv.classList.add("task-info");
     taskP.classList.add("task");
+    taskDateP.classList.add("shiftDate");
+    taskAssignmentP.classList.add("task-sub");
     taskCompleteBtn.classList.add("completeBtn");
     taskCompleteBtn.setAttribute("id", "js-completed-btn");
     taskDeleteBtn.classList.add("deleteBtn");
     taskDeleteBtn.setAttribute("id", "js-delete-btn");
 
+    // assiding values
+    taskP.innerText = task.task;
+    taskAssignmentP.innerText = task.taskAssigment;
+    taskDateP.innerText = task.shiftDate;
+    taskCompleteBtn.innerHTML = `<i class="fa fa-check"></i>`;
+    taskDeleteBtn.innerHTML = `<i class="fa fa-trash-o"></i>`;
+
     // isCompleted strike-through
     if (task.isCompleted === true) {
       taskP.classList.add("strike");
+      taskCompleteBtn.innerHTML = `<i class="fa fa-close"></i>`;
+    } else {
+      taskCompleteBtn.innerHTML = `<i class="fa fa-check"></i>`;
     }
-
-    // assiding values
-    taskP.innerText = task.taskName;
-    taskDateP.innerText = task.targetDate;
-    taskCompleteBtn.innerHTML = `<i class="fa fa-edit"></i>`;
-    taskDeleteBtn.innerHTML = `<i class="fa fa-trash-o"></i>`;
   });
 }
 
-function deleteTask(param1) {
+function deleteTask(dataSetId) {
   // remove the item from the task array
   // Note:for arrow functions, if it is inside a curly braces, put "return", if not, no need to put one.
 
-  // this returns an array wih remove content
-  tasks.splice(param1, 1);
+  // this returns an array wih the removed content
+  tasks.splice(dataSetId, 1);
   taskRendering(tasks);
 
   //show/remove dialog
@@ -131,32 +152,45 @@ function deleteTask(param1) {
 
   // saving to localStorage
   save();
+
+  // task count
+  updateTaskCount();
 }
 
-function updateCompleteStatus(param1, param2) {
-  if (param1.classList.contains("strike")) {
+function updateCompleteStatus(taskName, taskDataSetId, taskButton) {
+  if (taskName.classList.contains("strike")) {
     // setting isCompleted to false
-    tasks[param2].isCompleted = false;
+    tasks[taskDataSetId].isCompleted = false;
 
     //remove strike-through
-    param1.classList.remove("strike");
+    taskName.classList.remove("strike");
+
+    // change icon
+    taskButton.innerHTML = `<i class="fa fa-check"></i>`;
 
     //show/remove dialog
     showDialog(uncheckedDialog);
 
     // saving to localStorage
     save();
+    // task count
+    updateTaskCount();
   } else {
     // setting isCompleted to true
-    tasks[param2].isCompleted = true;
+    tasks[taskDataSetId].isCompleted = true;
 
     // adding strike-through
-    param1.classList.add("strike");
+    taskName.classList.add("strike");
+
+    // change icon
+    taskButton.innerHTML = `<i class="fa fa-close"></i>`;
 
     // show dialog
     showDialog(completeDialog);
     // saving to localStorage
     save();
+    // task count
+    updateTaskCount();
   }
 }
 
@@ -164,6 +198,63 @@ function save() {
   localStorage.setItem("listOfTasks", JSON.stringify(tasks));
 }
 
+function collapseSidebar() {
+  if (sidebar.classList.contains("showSideBar")) {
+    sidebar.classList.remove("showSideBar");
+  } else {
+    sidebar.classList.add("showSideBar");
+  }
+}
+
+function countTask(array, key = "all", value) {
+  if (key === "all") {
+    return array.length;
+  } else {
+    let count = array.filter((item) => item[key] === value); //use bracket notation for dynamic key
+    return count.length;
+  }
+}
+
+function updateTaskCount() {
+  tables[0].querySelector(".js-total-task").innerText = countTask(tasks);
+  tables[0].querySelector(".js-touched").innerText = countTask(
+    tasks,
+    "isCompleted",
+    true,
+  );
+  tables[0].querySelector(".js-not-touched").innerText = countTask(
+    tasks,
+    "isCompleted",
+    false,
+  );
+  tables[1].querySelector(".js-assigned").innerText = countTask(
+    tasks,
+    "taskAssigment",
+    "Assigned task",
+  );
+  tables[1].querySelector(".js-grabbed").innerText = countTask(
+    tasks,
+    "taskAssigment",
+    "Grabbed task",
+  );
+  tables[1].querySelector(".js-previously").innerText = countTask(
+    tasks,
+    "taskAssigment",
+    "Previously worked on",
+  );
+  tables[1].querySelector(".js-endorsed").innerText = countTask(
+    tasks,
+    "taskAssigment",
+    "Endorsed to me",
+  );
+  tables[1].querySelector(".js-none").innerText = countTask(
+    tasks,
+    "taskAssigment",
+    " - ",
+  );
+}
+
+// button events
 addButton.addEventListener("click", addTask);
 
 inputField.addEventListener("keydown", function (e) {
@@ -178,16 +269,30 @@ dateField.addEventListener("keydown", function (e) {
   }
 });
 
-taskField.addEventListener("click", (e) => {
-  // My brain cannot keep up with the logic, a simply explanation would be, I created a code that has not yet been turned in to a function. After seeing how messy it was, I decided to turn it into a function and passed all the arguments that are necessary for the code to run.
-  const targetBtn = e.target;
-  const parentDiv = e.target.closest(".task-container");
-  const taskText = targetBtn.closest("div").querySelector("p");
-  const targetBtnDataSet = targetBtn.closest("div").dataset.id;
-
-  if (targetBtn.classList.contains("deleteBtn")) {
-    deleteTask(targetBtnDataSet);
-  } else if (targetBtn.classList.contains("completeBtn")) {
-    updateCompleteStatus(taskText, targetBtnDataSet);
+assignmentMethod.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    addTask();
   }
 });
+
+taskField.addEventListener("click", (e) => {
+  // So my delete function uses splice method for deleting the task from the array list. It uses the data-id of the task to identify the task that needs to be removed. That is why it is necessary to get the it. In this code, it is stored in the variable "taskDataSetId".
+
+  const targetBtn = e.target;
+  const deleteBtn = targetBtn.closest(".deleteBtn");
+  const completeBtn = targetBtn.closest(".completeBtn");
+
+  if (!deleteBtn && !completeBtn) return;
+
+  const targetBtnDiv = e.target.closest(".task-container");
+  const taskName = targetBtnDiv.querySelector(".task");
+  const taskDataSetId = targetBtnDiv.dataset.id;
+
+  if (deleteBtn) {
+    deleteTask(taskDataSetId);
+  } else if (completeBtn) {
+    updateCompleteStatus(taskName, taskDataSetId, completeBtn);
+  }
+});
+
+floatButton.addEventListener("click", collapseSidebar);
