@@ -22,22 +22,35 @@
         class="inputField"
         id="js-input-field"
         placeholder="Type a task"
+        required
       />
+      <select name="task-assignment" id="js-task-assignment">
+        <option value="-" selected disabled>Task Assignment</option>
+        <option value="Assigned task">Assigned Task</option>
+        <option value="Grabbed task">Grabbed task</option>
+        <option value="Previously worked on">Previously worked on</option>
+        <option value="Endorsed to me">Endorsed to me</option>
+      </select>
+
       <input type="date" class="date inputField" id="js-datePicker" />
       <button class="addBtn">
         <i class="fa fa-plus-square-o"></i>
       </button>
     </main>
     <div class="header card">
-      <p class="task-name">Task Name</p>
+      <p class="task-name">Task</p>
       <hr class="vr" />
-      <p class="target-date">Target Date</p>
+      <p class="target-date">Shift date</p>
       <hr class="vr" />
       <p class="option">Options</p>
     </div>
     <section class="card">
       <!-- <div class="task-container">
-        <p class="task">task goes here</p>
+        <div class="task-info">
+          <p class="task">task name</p>
+          <p class="task-sub">task assignment goes here</p>
+        </div>
+        <p class="shiftDate">date goes here</p>
         <button class="completeBtn" id="js-completed-btn">
           <i class="fa fa-edit"></i>
         </button>
@@ -63,5 +76,64 @@
     <div class="dialog task-unchecked">
       <p>Task marked as not completed!</p>
     </div>
+
+    <div class="float-container">
+      <button><i class="fa fa-plus"></i></button>
+    </div>
+
+    <aside>
+      <h1 class="taskStats">WIP: Task summary</h1>
+      <hr />
+      <br />
+      <table class="js-table-one">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th><p class="js-total-task">0</p></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Completed</td>
+            <td><p class="js-touched">0</p></td>
+          </tr>
+          <tr>
+            <td>Not yet started</td>
+            <td><p class="js-not-touched">0</p></td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <!-- by task assignment -->
+      <table class="js-table-two">
+        <thead>
+          <tr>
+            <th colspan="2">By task assignment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Assigned</td>
+            <td><p class="js-assigned">0</p></td>
+          </tr>
+          <tr>
+            <td>Grabbed task</td>
+            <td><p class="js-grabbed">0</p></td>
+          </tr>
+          <tr>
+            <td>Previously worked on</td>
+            <td><p class="js-previously">0</p></td>
+          </tr>
+          <tr>
+            <td>Endorsed to me</td>
+            <td><p class="js-endorsed">0</p></td>
+          </tr>
+          <tr>
+            <td>-</td>
+            <td><p class="js-none">0</p></td>
+          </tr>
+        </tbody>
+      </table>
+    </aside>
   </body>
 </html>
