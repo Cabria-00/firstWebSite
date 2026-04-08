@@ -14,11 +14,15 @@ body {
 
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   justify-content: center;
+  margin: auto;
   align-items: center;
   gap: 1rem;
 
   font-family: "Noto sans", Helvetica, sans-serif;
+
+  position: relative;
 }
 
 /* general styling */
@@ -27,7 +31,8 @@ body {
   backdrop-filter: blur(10px);
   padding: 1rem;
   border-radius: 1rem;
-  min-width: 30vw;
+  min-width: 40vw;
+  margin: 0 auto;
 
   font-size: 1.4rem;
 
@@ -42,9 +47,12 @@ section {
   flex-direction: column;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
+  overflow-y: auto; /*Puts scrollbar when to many items*/
+  scrollbar-width: none; /*hides scrollbar but sill scrollable*/
+  max-height: 70vh;
 }
 
-section div:not(:last-child) {
+.task-container:not(:last-child) {
   border-bottom: 1px solid black;
 }
 
@@ -57,6 +65,15 @@ input {
 input[type="date"] {
   padding: 0 1rem;
   flex: 1;
+}
+
+select {
+  border-radius: 1rem;
+  padding: 0.5rem;
+  flex: 1;
+  outline-color: rgb(137, 221, 137);
+  background-color: hsla(0, 0%, 100%, 0.6);
+  border: none;
 }
 
 button {
@@ -122,6 +139,11 @@ i {
   padding: 0.4rem;
 }
 
+.task-info {
+  display: flex;
+  flex-direction: column;
+}
+
 /* specific styling */
 
 .inputField {
@@ -138,10 +160,19 @@ i {
   background-color: rgb(137, 221, 137);
 }
 
-.task {
+.task-info {
   flex: 5;
 }
 
+.task-sub {
+  font-size: 1rem;
+  margin: 0.3rem 0;
+  font-style: italic;
+}
+.shiftDate {
+  flex: 3;
+  justify-content: flex-start;
+}
 .completeBtn,
 .deleteBtn {
   flex: 1;
@@ -167,7 +198,6 @@ div.header {
   /* border-bottom-left-radius: 0;
   border-bottom-right-radius: 0; */
   align-items: center;
-  margin-left: 0.5rem;
 }
 
 .task-name {
@@ -178,10 +208,80 @@ div.header {
 }
 .option {
   flex: 1;
+  text-align: center;
 }
 
 .vr {
   width: 2px;
   height: 1rem;
   margin-right: 1rem;
+}
+
+.float-container {
+  position: absolute;
+  bottom: 50px;
+  right: 100px;
+}
+
+aside {
+  width: 25vw;
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+  top: 0;
+
+  background-color: hsla(0, 0%, 100%, 0.3);
+  backdrop-filter: blur(10px);
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.753);
+
+  transform: translateX(-300px);
+  opacity: 0;
+  transition:
+    transform 0.5s ease,
+    opacity 0.5s ease;
+}
+
+aside.showSideBar {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* @keyframes slideOutSideBar {
+  from {
+    transform: translateX(0px);
+  }
+  to {
+    transform: translateX(-300px);
+  }
+} */
+
+aside h1 {
+  color: #111;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+aside hr {
+  height: 3px;
+}
+
+/* table general layout */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.5rem;
+}
+
+th,
+td {
+  padding: 10px 15px;
+  border: 1px solid #fce4e4;
+}
+
+.js-touched,
+.js-not-touched {
+  text-align: center;
 }
