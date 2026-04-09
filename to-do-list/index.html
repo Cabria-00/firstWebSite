@@ -40,6 +40,8 @@
     <div class="header card">
       <p class="task-name">Task</p>
       <hr class="vr" />
+      <p class="isTracked">Tracked</p>
+      <hr class="vr" />
       <p class="target-date">Shift date</p>
       <hr class="vr" />
       <p class="option">Options</p>
@@ -50,6 +52,7 @@
           <p class="task">task name</p>
           <p class="task-sub">task assignment goes here</p>
         </div>
+        <input type="checkbox" class="js-myCheckbox" />
         <p class="shiftDate">date goes here</p>
         <button class="completeBtn" id="js-completed-btn">
           <i class="fa fa-edit"></i>
@@ -75,6 +78,12 @@
     </div>
     <div class="dialog task-unchecked">
       <p>Task marked as not completed!</p>
+    </div>
+    <div class="dialog task-tracked">
+      <p>Task is "Tracked" in the tracker!</p>
+    </div>
+    <div class="dialog task-untracked">
+      <p>Task is marked as "Not yet tracked"</p>
     </div>
 
     <div class="float-container">
