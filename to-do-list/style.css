@@ -67,6 +67,15 @@ input[type="date"] {
   flex: 1;
 }
 
+input[type="checkbox"] {
+  width: 1.2rem;
+  height: 1.2rem;
+  cursor: pointer;
+  accent-color: #38bdf8;
+  border: 2px solid #999;
+  flex: 1;
+}
+
 select {
   border-radius: 1rem;
   padding: 0.5rem;
@@ -85,10 +94,12 @@ button {
   font-weight: bold;
   cursor: pointer;
   transition: 200ms ease-in-out;
+  opacity: 0.9;
 }
 
 button:hover {
   transform: scale(1.1);
+  opacity: 1;
 }
 
 .dialog {
@@ -155,7 +166,8 @@ i {
 
 .addBtn,
 .task-added,
-.task-completed {
+.task-completed,
+.task-tracked {
   flex: 1;
   background-color: rgb(137, 221, 137);
 }
@@ -180,7 +192,8 @@ i {
 
 .completeBtn,
 .no-task-input,
-.task-unchecked {
+.task-unchecked,
+.task-untracked {
   background-color: rgb(236, 236, 116);
 }
 
