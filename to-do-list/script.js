@@ -163,7 +163,7 @@ function deleteTask(index) {
   // Note:for arrow functions, if it is inside a curly braces, put "return", if not, no need to put one.
 
   // this returns an array wih the removed content
-  array.splice(index, 1);
+  tasks.splice(index, 1);
 
   // update ui
   taskRendering(tasks);
