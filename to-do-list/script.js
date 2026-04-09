@@ -9,20 +9,25 @@ const completeDialog = document.querySelector(".task-completed");
 const deleteDialog = document.querySelector(".task-deleted");
 const addDialog = document.querySelector(".task-added");
 const uncheckedDialog = document.querySelector(".task-unchecked");
+const cbTracked = document.querySelector(".task-tracked");
+const cbUntracked = document.querySelector(".task-untracked");
 const main = document.querySelectorAll("main");
 const sidebar = document.querySelector("aside");
 const floatButton = document.querySelector(".float-container");
 const tables = document.querySelectorAll("table");
+const checkBoxes = document.querySelectorAll(".js-myCheckbox");
 
 // task class blueprint
 class Task {
   constructor(task, taskAssigment, shiftDate) {
     this.task = task;
-    this.taskAssigment = taskAssigment || " - ";
+    this.taskAssigment = taskAssigment || "-";
     this.shiftDate = shiftDate || new Date().toISOString().split("T")[0];
     // this.taskNotes = taskNotes;
     this.isCompleted = false;
     this.taskCreateDate = new Date().toISOString().split("T")[0];
+    this.uniqueId = Date.now();
+    this.isTracked = false;
   }
 
   // get taskName() {
@@ -67,7 +72,11 @@ function addTask() {
     showDialog(errorDialog);
   } else {
     tasks.push(
-      new Task(inputField.value, assignmentMethod.value, dateField.value),
+      new Task(
+        inputField.value.trim(),
+        assignmentMethod.value,
+        dateField.value,
+      ),
     );
     showDialog(addDialog);
 
@@ -91,11 +100,12 @@ function taskRendering(paramArray) {
   // reseting the task
   taskField.innerHTML = "";
 
-  paramArray.forEach((task, index) => {
+  paramArray.forEach((task) => {
     // creating elements
     const taskDiv = document.createElement("div");
     const taskInfoDiv = document.createElement("div");
     const taskP = document.createElement("p");
+    const taskCheckBox = document.createElement("input");
     const taskAssignmentP = document.createElement("p");
     const taskDateP = document.createElement("p");
     const taskCompleteBtn = document.createElement("button");
@@ -106,17 +116,20 @@ function taskRendering(paramArray) {
     taskDiv.appendChild(taskInfoDiv);
     taskInfoDiv.appendChild(taskP);
     taskInfoDiv.appendChild(taskAssignmentP);
+    taskDiv.appendChild(taskCheckBox);
     taskDiv.appendChild(taskDateP);
     taskDiv.appendChild(taskCompleteBtn);
     taskDiv.appendChild(taskDeleteBtn);
 
     // adding attributes
     taskDiv.classList.add("task-container");
-    taskDiv.dataset.id = index;
+    taskDiv.dataset.id = task.uniqueId;
     taskInfoDiv.classList.add("task-info");
     taskP.classList.add("task");
     taskDateP.classList.add("shiftDate");
     taskAssignmentP.classList.add("task-sub");
+    taskCheckBox.classList.add("js-myCheckbox");
+    taskCheckBox.setAttribute("type", "checkbox");
     taskCompleteBtn.classList.add("completeBtn");
     taskCompleteBtn.setAttribute("id", "js-completed-btn");
     taskDeleteBtn.classList.add("deleteBtn");
@@ -136,15 +149,23 @@ function taskRendering(paramArray) {
     } else {
       taskCompleteBtn.innerHTML = `<i class="fa fa-check"></i>`;
     }
+
+    if (task.isTracked === true) {
+      taskCheckBox.checked = true;
+    } else {
+      taskCheckBox.checked = false;
+    }
   });
 }
 
-function deleteTask(dataSetId) {
+function deleteTask(index) {
   // remove the item from the task array
   // Note:for arrow functions, if it is inside a curly braces, put "return", if not, no need to put one.
 
   // this returns an array wih the removed content
-  tasks.splice(dataSetId, 1);
+  array.splice(index, 1);
+
+  // update ui
   taskRendering(tasks);
 
   //show/remove dialog
@@ -157,13 +178,13 @@ function deleteTask(dataSetId) {
   updateTaskCount();
 }
 
-function updateCompleteStatus(taskName, taskDataSetId, taskButton) {
+function updateCompleteStatus(index, taskName, taskButton) {
   if (taskName.classList.contains("strike")) {
-    // setting isCompleted to false
-    tasks[taskDataSetId].isCompleted = false;
-
     //remove strike-through
     taskName.classList.remove("strike");
+
+    // setting isCompleted to false
+    tasks[index].isCompleted = false;
 
     // change icon
     taskButton.innerHTML = `<i class="fa fa-check"></i>`;
@@ -176,11 +197,10 @@ function updateCompleteStatus(taskName, taskDataSetId, taskButton) {
     // task count
     updateTaskCount();
   } else {
-    // setting isCompleted to true
-    tasks[taskDataSetId].isCompleted = true;
-
     // adding strike-through
     taskName.classList.add("strike");
+    // setting isCompleted to true
+    tasks[index].isCompleted = true;
 
     // change icon
     taskButton.innerHTML = `<i class="fa fa-close"></i>`;
@@ -253,6 +273,17 @@ function updateTaskCount() {
     " - ",
   );
 }
+function updateTrackerStatus(index, targetBtn) {
+  if (targetBtn.checked) {
+    tasks[index].isTracked = true;
+    showDialog(cbTracked);
+    save();
+  } else {
+    tasks[index].isTracked = false;
+    showDialog(cbUntracked);
+    save();
+  }
+}
 
 // button events
 addButton.addEventListener("click", addTask);
@@ -281,17 +312,24 @@ taskField.addEventListener("click", (e) => {
   const targetBtn = e.target;
   const deleteBtn = targetBtn.closest(".deleteBtn");
   const completeBtn = targetBtn.closest(".completeBtn");
+  const targetCB = targetBtn
+    .closest(".task-container")
+    .querySelector(".js-myCheckbox");
 
-  if (!deleteBtn && !completeBtn) return;
+  if (!deleteBtn && !completeBtn && !targetCB) return;
 
   const targetBtnDiv = e.target.closest(".task-container");
   const taskName = targetBtnDiv.querySelector(".task");
-  const taskDataSetId = targetBtnDiv.dataset.id;
+  const taskDataSetId = Number(targetBtnDiv.dataset.id);
+  // the index of the object related to the button.
+  const index = tasks.findIndex((item) => item.uniqueId === taskDataSetId);
 
   if (deleteBtn) {
-    deleteTask(taskDataSetId);
+    deleteTask(index, taskDataSetId);
   } else if (completeBtn) {
-    updateCompleteStatus(taskName, taskDataSetId, completeBtn);
+    updateCompleteStatus(index, taskName, completeBtn);
+  } else if (targetCB) {
+    updateTrackerStatus(index, targetBtn);
   }
 });
 
