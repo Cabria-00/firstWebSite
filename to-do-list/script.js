@@ -4,6 +4,17 @@ const inputField = document.querySelector("#js-input-field");
 const dateField = document.querySelector("#js-datePicker");
 const assignmentMethod = document.querySelector("#js-task-assignment");
 const taskField = document.querySelector("section");
+const main = document.querySelectorAll("main");
+const sidebar = document.querySelector("aside");
+const floatButton = document.querySelector(".float-container");
+const tables = document.querySelectorAll("table");
+const checkBoxes = document.querySelectorAll(".js-myCheckbox");
+const searchField = document.querySelector(".searchField");
+const searchBtn = document.querySelector(".searchBtn");
+const changelogBtn = document.querySelector(".changelog");
+const changelogSidebar = document.querySelector(".changelog-sidebar");
+const changeSection = document.querySelector(".change-section");
+// dialogs
 const errorDialog = document.querySelector(".no-task-input");
 const completeDialog = document.querySelector(".task-completed");
 const deleteDialog = document.querySelector(".task-deleted");
@@ -11,11 +22,7 @@ const addDialog = document.querySelector(".task-added");
 const uncheckedDialog = document.querySelector(".task-unchecked");
 const cbTracked = document.querySelector(".task-tracked");
 const cbUntracked = document.querySelector(".task-untracked");
-const main = document.querySelectorAll("main");
-const sidebar = document.querySelector("aside");
-const floatButton = document.querySelector(".float-container");
-const tables = document.querySelectorAll("table");
-const checkBoxes = document.querySelectorAll(".js-myCheckbox");
+const duplicateDialog = document.querySelector(".duplicate");
 
 // task class blueprint
 class Task {
@@ -49,6 +56,90 @@ class Task {
 // task storage
 let tasks = JSON.parse(localStorage.getItem("listOfTasks")) || [];
 
+// changelog storage
+const changelog = [
+  {
+    Date: "April 5, 2026",
+    Summary: "Initial layout of the tracker. It only has add functionality.",
+    Changes: [
+      "Added 'add', 'mark as complete', and 'delete' button.",
+      "Added 'addTask' function",
+      "Added 'taskRendering' function",
+    ],
+  },
+  {
+    Date: "April 6, 2026",
+    Summary:
+      "Created a 'Task' class that would be the blueprint of the task. It has taskName, taskDate, and isCompleted as the keys. Also enable of saving the tasks in the localStorage. Adding task now prompts a dialog to appear and added the ability to add task by entering the 'enter' key.",
+    Changes: [
+      "Added 'Task' class",
+      "Added 'save' to JSON",
+      "Added 'dialog' popup",
+      "Added 'addTask' by entering the 'enter' key",
+      "Added 'date' field",
+    ],
+  },
+  {
+    Date: "April 7, 2026",
+    Summary:
+      "Added other dialogs that will pop up depending on the event.Created a function for each event for ease of use and triggering to make the project easily scalable. Added the delete and update functionality",
+    Changes: [
+      "Added 'showDialog' function",
+      "Added 'save' function",
+      "Added 'deleteTask' function",
+      "Added 'updateCompleteStatus' function",
+    ],
+  },
+  {
+    Date: "April 8, 2026",
+    Summary:
+      "Added a sidebar that will show the total number of task depending if complete or not and task assignment.",
+    Changes: [
+      "Added 'task-assigment' input",
+      "Added 'taskCount' function",
+      "Added 'updateTaskCount' function",
+      "Added 'sideBar'",
+    ],
+  },
+  {
+    Date: "April 9, 2026",
+    Summary:
+      "Added checkboxes that indicates if an item is tracked in the tracker. Refactor the code. Made the new task to appear on top.",
+    Changes: [
+      "Added 'checkboxes'.",
+      "Added 'checkbox' dialogs",
+      "Replace .pop() to .unshift()",
+    ],
+  },
+  {
+    Date: "April 10, 2026",
+    Summary:
+      "Added the function of checking if a duplicate is already in the list, Also added a search functionality that will render the item if it is found and will inform the user if it is not found. Added the changelog to track all the progress made.",
+    Changes: [
+      "Added 'duplicate' dialog",
+      "Added 'duplicateChecker' function",
+      "Added 'Search button'",
+      "Added 'Seach field'",
+      "Added 'createElement' function",
+      "Added 'itemSearch' function",
+      "Added 'closeSearch' function",
+      "Added 'changelog'",
+      "Added changelog to localStorage",
+    ],
+  },
+  {
+    Date: "Bug",
+    Summary:
+      "Found an issue with the rendering of the sidebar. Expected - If one sidebar is open the other will close. Actual - both are open at the same time",
+    Changes: [
+      "Added 'add', 'mark as complete', and 'delete' button.",
+      "Added 'addTask' function",
+      "Added 'taskRendering' function",
+    ],
+  },
+];
+saveChangelog();
+
 //Initial rendering of task
 taskRendering(tasks);
 
@@ -66,12 +157,11 @@ function showDialog(dialogType, timer = 3000) {
     dialogType.classList.remove("showDialog");
   }, timer);
 }
-
 function addTask() {
   if (inputField.value === "") {
     showDialog(errorDialog);
   } else {
-    tasks.push(
+    tasks.unshift(
       new Task(
         inputField.value.trim(),
         assignmentMethod.value,
@@ -95,11 +185,12 @@ function addTask() {
     updateTaskCount();
   }
 }
-
 function taskRendering(paramArray) {
   // reseting the task
   taskField.innerHTML = "";
-
+  createElement(paramArray);
+}
+function createElement(paramArray) {
   paramArray.forEach((task) => {
     // creating elements
     const taskDiv = document.createElement("div");
@@ -110,14 +201,20 @@ function taskRendering(paramArray) {
     const taskDateP = document.createElement("p");
     const taskCompleteBtn = document.createElement("button");
     const taskDeleteBtn = document.createElement("button");
+    const vr1 = document.createElement("hr");
+    const vr2 = document.createElement("hr");
+    const vr3 = document.createElement("hr");
 
     // append
     taskField.appendChild(taskDiv);
     taskDiv.appendChild(taskInfoDiv);
     taskInfoDiv.appendChild(taskP);
     taskInfoDiv.appendChild(taskAssignmentP);
+    taskDiv.appendChild(vr1);
     taskDiv.appendChild(taskCheckBox);
+    taskDiv.appendChild(vr2);
     taskDiv.appendChild(taskDateP);
+    taskDiv.appendChild(vr3);
     taskDiv.appendChild(taskCompleteBtn);
     taskDiv.appendChild(taskDeleteBtn);
 
@@ -134,6 +231,9 @@ function taskRendering(paramArray) {
     taskCompleteBtn.setAttribute("id", "js-completed-btn");
     taskDeleteBtn.classList.add("deleteBtn");
     taskDeleteBtn.setAttribute("id", "js-delete-btn");
+    vr1.classList.add("vr");
+    vr2.classList.add("vr");
+    vr3.classList.add("vr");
 
     // assiding values
     taskP.innerText = task.task;
@@ -157,7 +257,6 @@ function taskRendering(paramArray) {
     }
   });
 }
-
 function deleteTask(index) {
   // remove the item from the task array
   // Note:for arrow functions, if it is inside a curly braces, put "return", if not, no need to put one.
@@ -177,7 +276,6 @@ function deleteTask(index) {
   // task count
   updateTaskCount();
 }
-
 function updateCompleteStatus(index, taskName, taskButton) {
   if (taskName.classList.contains("strike")) {
     //remove strike-through
@@ -213,19 +311,20 @@ function updateCompleteStatus(index, taskName, taskButton) {
     updateTaskCount();
   }
 }
-
 function save() {
   localStorage.setItem("listOfTasks", JSON.stringify(tasks));
 }
-
 function collapseSidebar() {
   if (sidebar.classList.contains("showSideBar")) {
     sidebar.classList.remove("showSideBar");
+    floatButton.querySelector("button").innerHTML =
+      `<i class="fa fa-plus"></i>`;
   } else {
     sidebar.classList.add("showSideBar");
+    floatButton.querySelector("button").innerHTML =
+      `<i class="fa fa-home"></i>`;
   }
 }
-
 function countTask(array, key = "all", value) {
   if (key === "all") {
     return array.length;
@@ -234,7 +333,6 @@ function countTask(array, key = "all", value) {
     return count.length;
   }
 }
-
 function updateTaskCount() {
   tables[0].querySelector(".js-total-task").innerText = countTask(tasks);
   tables[0].querySelector(".js-touched").innerText = countTask(
@@ -284,25 +382,65 @@ function updateTrackerStatus(index, targetBtn) {
     save();
   }
 }
+function duplicateChecker() {
+  const isDuplicate = tasks.some(
+    (item) => item.task === inputField.value.trim(),
+  );
+  if (isDuplicate) {
+    showDialog(duplicateDialog);
+    inputField.value = "";
+  } else {
+    addTask();
+  }
+}
+function itemSearch() {
+  const searchItem = searchField.value.trim();
+  const result = tasks.filter((item) => item.task === searchItem);
+
+  if (result.length > 0) {
+    taskRendering(result);
+  } else {
+    taskField.innerHTML = "";
+    // create element
+    const errorDiv = document.createElement("div");
+    const errorP = document.createElement("p");
+
+    // append
+    taskField.append(errorDiv);
+    errorDiv.append(errorP);
+
+    // adding attributes
+    errorDiv.classList.add("errorFormat");
+
+    // append
+    errorP.textContent = `'${searchItem}' not found`;
+  }
+}
+function closeSearch() {
+  taskRendering(tasks);
+}
+function saveChangelog() {
+  localStorage.setItem("changelog", JSON.stringify(changelog));
+}
 
 // button events
-addButton.addEventListener("click", addTask);
+addButton.addEventListener("click", duplicateChecker);
 
 inputField.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
-    addTask();
+    duplicateChecker();
   }
 });
 
 dateField.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
-    addTask();
+    duplicateChecker();
   }
 });
 
 assignmentMethod.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
-    addTask();
+    duplicateChecker();
   }
 });
 
@@ -312,9 +450,7 @@ taskField.addEventListener("click", (e) => {
   const targetBtn = e.target;
   const deleteBtn = targetBtn.closest(".deleteBtn");
   const completeBtn = targetBtn.closest(".completeBtn");
-  const targetCB = targetBtn
-    .closest(".task-container")
-    .querySelector(".js-myCheckbox");
+  const targetCB = targetBtn.matches(".js-myCheckbox");
 
   if (!deleteBtn && !completeBtn && !targetCB) return;
 
@@ -334,3 +470,63 @@ taskField.addEventListener("click", (e) => {
 });
 
 floatButton.addEventListener("click", collapseSidebar);
+searchBtn.addEventListener("click", itemSearch);
+searchField.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    itemSearch();
+  } else if (e.key === "Escape") {
+    closeSearch();
+    searchField.value = "";
+  } else if (!searchField.value) {
+    closeSearch();
+  }
+});
+
+changelogBtn.addEventListener("click", function () {
+  if (changelogSidebar.classList.contains("showSideBar")) {
+    changelogSidebar.classList.remove("showSideBar");
+    changelogBtn.querySelector("button").innerHTML =
+      `<i class="fa fa-info"></i>`;
+  } else {
+    changelogSidebar.classList.add("showSideBar");
+    renderChangeLog();
+    changelogBtn.querySelector("button").innerHTML =
+      `<i class="fa fa-home"></i>`;
+  }
+});
+
+function renderChangeLog() {
+  document
+    .querySelectorAll("aside")
+    .forEach((aside) => aside.classList.remove("showSideBar"));
+
+  changelogSidebar.classList.add("showSideBar");
+
+  changeSection.innerHTML = "";
+  const reversedChangelog = [...changelog].sort(
+    (a, b) => new Date(b.Date) - new Date(a.Date),
+  );
+
+  reversedChangelog.forEach((change) => {
+    // creating elements
+    const changeContainer = document.createElement("div");
+    const dateContainer = document.createElement("p");
+    const summaryContainer = document.createElement("p");
+    const hr = document.createElement("hr");
+
+    // appending elements
+    changeSection.appendChild(changeContainer);
+    changeContainer.appendChild(dateContainer);
+    changeContainer.appendChild(hr);
+    changeContainer.appendChild(summaryContainer);
+
+    // assigning attributes
+    changeContainer.classList.add("div-section");
+    dateContainer.classList.add("changeDate");
+    summaryContainer.classList.add("changeSummary");
+
+    // assigning text content
+    dateContainer.innerText = `${change.Date}`;
+    summaryContainer.innerText = `${change.Summary}`;
+  });
+}
