@@ -74,6 +74,7 @@ input[type="checkbox"] {
   accent-color: #38bdf8;
   border: 2px solid #999;
   flex: 1;
+  justify-content: flex-start;
 }
 
 select {
@@ -144,7 +145,7 @@ i {
 
 .task-container {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   align-items: center;
 
   padding: 0.4rem;
@@ -173,7 +174,7 @@ i {
 }
 
 .task-info {
-  flex: 5;
+  flex: 4;
 }
 
 .task-sub {
@@ -193,7 +194,8 @@ i {
 .completeBtn,
 .no-task-input,
 .task-unchecked,
-.task-untracked {
+.task-untracked,
+.duplicate {
   background-color: rgb(236, 236, 116);
 }
 
@@ -214,14 +216,15 @@ div.header {
 }
 
 .task-name {
-  flex: 2;
+  flex: 3;
 }
 .target-date {
   flex: 1;
 }
 .option {
+  display: flex;
+  gap: 0.5rem;
   flex: 1;
-  text-align: center;
 }
 
 .vr {
@@ -231,6 +234,11 @@ div.header {
 }
 
 .float-container {
+  position: absolute;
+  bottom: 90px;
+  right: 100px;
+}
+.changelog {
   position: absolute;
   bottom: 50px;
   right: 100px;
@@ -257,19 +265,11 @@ aside {
     opacity 0.5s ease;
 }
 
-aside.showSideBar {
+aside.taskCount.showSideBar,
+aside.changelog-sidebar.showSideBar {
   opacity: 1;
   transform: translateX(0);
 }
-
-/* @keyframes slideOutSideBar {
-  from {
-    transform: translateX(0px);
-  }
-  to {
-    transform: translateX(-300px);
-  }
-} */
 
 aside h1 {
   color: #111;
@@ -297,4 +297,28 @@ td {
 .js-touched,
 .js-not-touched {
   text-align: center;
+}
+
+.errorFormat {
+  text-align: center;
+  font-style: italic;
+  font-size: medium;
+}
+
+aside .div-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  border-radius: 1rem;
+  padding: 0.6rem;
+  margin: 10px 0;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.change-section {
+  height: 95%;
+  font-size: 1.1rem;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
