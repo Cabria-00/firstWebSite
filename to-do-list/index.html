@@ -42,9 +42,17 @@
       <hr class="vr" />
       <p class="isTracked">Tracked</p>
       <hr class="vr" />
-      <p class="target-date">Shift date</p>
+      <p class="target-date">Date</p>
       <hr class="vr" />
-      <p class="option">Options</p>
+      <div class="option">
+        <input
+          type="text"
+          class="inputField searchField"
+          placeholder="Search"
+        />
+        <button class="searchBtn"><i class="fa fa-search"></i></button>
+        <!-- <button><i class="fa fa-filter"></i></button> -->
+      </div>
     </div>
     <section class="card">
       <!-- <div class="task-container">
@@ -85,12 +93,20 @@
     <div class="dialog task-untracked">
       <p>Task is marked as "Not yet tracked"</p>
     </div>
+    <div class="dialog duplicate">
+      <p>Task already exist</p>
+    </div>
 
     <div class="float-container">
       <button><i class="fa fa-plus"></i></button>
     </div>
 
-    <aside>
+    <div class="changelog">
+      <button><i class="fa fa-info"></i></button>
+    </div>
+
+    <!-- sidebar for task coung -->
+    <aside class="taskCount">
       <h1 class="taskStats">WIP: Task summary</h1>
       <hr />
       <br />
@@ -143,6 +159,17 @@
           </tr>
         </tbody>
       </table>
+    </aside>
+
+    <!-- sidebar for changelog -->
+    <aside class="changelog-sidebar">
+      <h1>Updates</h1>
+      <hr />
+      <div class="change-section"></div>
+      <!-- <div class="div-section">
+        <p class="changeDate"></p>
+        <p class="changeSummary"></p>
+      </div> -->
     </aside>
   </body>
 </html>
