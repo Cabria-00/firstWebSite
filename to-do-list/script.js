@@ -57,7 +57,7 @@ class Task {
     // this.taskNotes = taskNotes;
     this.isCompleted = false;
     this.taskCreateDate = new Date().toISOString().split("T")[0];
-    this.uniqueId = Date.now();
+    this.uniqueId = Date.now() + Math.random();
     this.isTracked = false;
   }
 
@@ -81,55 +81,55 @@ let tasks = JSON.parse(localStorage.getItem("listOfTasks")) || []; // task stora
 const changelog = [
   {
     Date: "April 5, 2026",
-    Summary: "Created the initial tracker layout with support for adding tasks",
+    Summary: "Created the initial tracker layout with task-adding support.",
     Changes: [
-      "Added 'add', 'mark as complete', and 'delete' button.",
-      "Added 'addTask' function",
-      "Added 'taskRendering' function",
+      "Added add, mark-as-complete, and delete buttons.",
+      "Added the addTask function.",
+      "Added the taskRendering function.",
     ],
   },
   {
     Date: "April 6, 2026",
     Summary:
-      "Added a task factory and localStorage support. Adding a task now shows a dialog, and tasks can also be added by pressing the Enter key.",
+      "Added a Task factory, localStorage support, dialog feedback, and Enter-key task submission.",
     Changes: [
-      "Added 'Task' class",
-      "Added 'save' to JSON",
-      "Added 'dialog' popup",
-      "Added 'addTask' by entering the 'enter' key",
-      "Added 'date' field",
+      "Added the Task class.",
+      "Added JSON saving.",
+      "Added dialog popups.",
+      "Enabled task creation with the Enter key.",
+      "Added the date field.",
     ],
   },
   {
     Date: "April 7, 2026",
     Summary:
-      "Added event-based dialogs, created reusable handler functions for easier scaling, and introduced delete and update functionality.",
+      "Added event-based dialogs and reusable handlers, along with delete and update functionality.",
     Changes: [
-      "Added 'showDialog' function",
-      "Added 'save' function",
-      "Added 'deleteTask' function",
-      "Added 'updateCompleteStatus' function",
+      "Added the showDialog function.",
+      "Added the save function.",
+      "Added the deleteTask function.",
+      "Added the updateCompleteStatus function.",
     ],
   },
   {
     Date: "April 8, 2026",
     Summary:
-      "Added a sidebar that shows the total number of tasks by completion status and task assignment.",
+      "Added a sidebar that displays task totals by completion status and task assignment.",
     Changes: [
-      "Added 'task-assigment' input",
-      "Added 'taskCount' function",
-      "Added 'updateTaskCount' function",
-      "Added 'sideBar'",
+      "Added the task-assignment input.",
+      "Added the taskCount function.",
+      "Added the updateTaskCount function.",
+      "Added the sidebar.",
     ],
   },
   {
     Date: "April 9, 2026",
     Summary:
-      "Added tracking checkboxes, refactored the codebase, and displayed newly added tasks at the top of the list.",
+      "Added tracking checkboxes, refactored the codebase, and moved new tasks to the top of the list.",
     Changes: [
-      "Added 'checkboxes'.",
-      "Added 'checkbox' dialogs",
-      "Replace .pop() to .unshift()",
+      "Added checkboxes.",
+      "Added checkbox dialogs.",
+      "Replaced pop() with unshift().",
     ],
   },
   {
@@ -137,28 +137,31 @@ const changelog = [
     Summary:
       "Added duplicate detection, search with not-found feedback, and a changelog for tracking progress. Bug: both sidebars can stay open at the same time.",
     Changes: [
-      "Added 'duplicate' dialog",
-      "Added 'duplicateChecker' function",
-      "Added 'Search button'",
-      "Added 'Seach field'",
-      "Added 'createElement' function",
-      "Added 'itemSearch' function",
-      "Added 'closeSearch' function",
-      "Added 'changelog'",
-      "Added changelog to localStorage",
+      "Added the duplicate dialog.",
+      "Added the duplicateChecker function.",
+      "Added the search button.",
+      "Added the search field.",
+      "Added the createElement function.",
+      "Added the itemSearch function.",
+      "Added the closeSearch function.",
+      "Added the changelog.",
+      "Saved the changelog to localStorage.",
     ],
   },
   {
     Date: "April 11, 2026",
     Summary:
-      "Fixed the sidebar issue, added bulk delete, gave list items a card-style layout, introduced slide-in animations for new items, and added filters for status and task assignment.",
+      "Fixed the sidebar issue, added bulk delete, refreshed the task cards, introduced slide-in animations for new task, shrink animation for deleted tasks  and added filters for status and task assignment.",
     Changes: [
-      "Fix the bug about the sidebar",
-      "Added 'bulkDelete'",
-      "Added 'dialogs' for bulk delete",
-      "Improved task list look",
-      "Refactor some codes",
-      "Added 'filter' function",
+      "Fixed the sidebar bug.",
+      "Added bulkDelete.",
+      "Added bulk delete dialogs.",
+      "Improved the task list styling.",
+      "Refactored parts of the codebase.",
+      "Added the filter function.",
+      "Refactored the addTask function.",
+      "Refactored the taskRendering function.",
+      "Refactored the createElement function.",
     ],
   },
 ]; // changelog storage
@@ -172,50 +175,63 @@ updateTaskCount(); // initial rendering of taskCount
 
 // button function
 function addTask() {
-  const newIndex = 0;
-
   if (inputField.value === "") {
     showDialog(errorDialog);
-  } else {
-    tasks.unshift(
-      new Task(
-        inputField.value.trim(),
-        assignmentMethod.value,
-        dateField.value,
-      ),
-    );
-    showDialog(addDialog);
-
-    // saving to localStorage
-    save();
-
-    //re-rendering of task to the display
-    taskRendering(tasks, newIndex);
-
-    // clearning input field
-    inputField.value = "";
-    dateField.value = "";
-    assignmentMethod.selectedIndex = 0; // selectedIndex is the method to reset the option of the select element to the first index
-
-    // update task count
-    updateTaskCount();
+    return;
   }
-} // Add button
-function deleteTask(index) {
+  const newTask = new Task(
+    inputField.value.trim(),
+    assignmentMethod.value,
+    dateField.value,
+  );
+
+  tasks.unshift(newTask);
+
+  const newElement = createElement(newTask);
+  newElement.classList.add("new");
+
+  taskField.prepend(newElement);
+
+  showDialog(addDialog);
+
+  // saving to localStorage
+  save();
+
+  // clearning input field
+  inputField.value = "";
+  dateField.value = "";
+  assignmentMethod.selectedIndex = 0; // selectedIndex is the method to reset the option of the select element to the first index
+
+  // update task count
+  updateTaskCount();
+}
+// Add button
+function deleteTask(index, taskItem) {
   // remove the item from the task array
   // Note:for arrow functions, if it is inside a curly braces, put "return", if not, no need to put one.
 
   // this returns an array wih the removed content
   tasks.splice(index, 1);
 
-  // update ui
-  taskRendering(tasks);
+  // saving to localStorage
+  save();
 
   //show/remove dialog
   showDialog(deleteDialog);
 
-  // saving to localStorage
-  save();
+  // update ui
+  // taskRendering(tasks);
+  taskItem.classList.add("remove");
+
+  setTimeout(() => {
+    taskItem.remove();
+  }, 900);
+
+  // taskItem.addEventListener("transitionend", () => {
+  //   taskItem.remove();
+  // });
+  // taskItem.classList.add("remove");
+  // Ai suggested this because this is a better approach but it keeps messing up so i am refraining from using it until i understand what this is
 
   // task count
   updateTaskCount();
@@ -257,7 +273,9 @@ function updateCompleteStatus(index, taskName, taskButton) {
 } // mark as complet button
 function itemSearch() {
   const searchItem = searchField.value.trim();
-  const result = tasks.filter((item) => item.task === searchItem);
+  const result = tasks.filter(
+    (item) => item.task.toLowerCase() === searchItem.toLowerCase(),
+  );
 
   if (result.length > 0) {
     taskRendering(result);
@@ -329,13 +347,17 @@ function bulkDelete() {
     closeBulkModal();
     showDialog(bulkDeleteFailDialog);
   } else {
+    taskField
+      .querySelectorAll(".task-container")
+      .forEach((el) => el.classList.add("remove"));
     tasks = [];
     save();
-    taskRendering(tasks);
     updateTaskCount();
     closeBulkModal();
-
     showDialog(bulkDeleteSuccessDialog);
+    setTimeout(() => {
+      taskRendering(tasks);
+    }, 900);
   }
 } // deleting all task in the list
 function openBulkModal() {
@@ -371,82 +393,145 @@ function showDialog(dialogType, timer = 3000) {
     dialogType.classList.remove("showDialog");
   }, timer);
 }
-function taskRendering(paramArray, newIndex = null) {
+function taskRendering(paramArray) {
   // reseting the task
   taskField.innerHTML = "";
-  createElement(paramArray, newIndex);
-}
-function createElement(paramArray, newIndex) {
-  paramArray.forEach((task, index) => {
-    // creating elements
-    const taskDiv = document.createElement("div");
-    const taskInfoDiv = document.createElement("div");
-    const taskP = document.createElement("p");
-    const taskCheckBox = document.createElement("input");
-    const taskAssignmentP = document.createElement("p");
-    const taskDateP = document.createElement("p");
-    const taskCompleteBtn = document.createElement("button");
-    const taskDeleteBtn = document.createElement("button");
-    const vr1 = document.createElement("hr");
-    const vr2 = document.createElement("hr");
-    const vr3 = document.createElement("hr");
+  paramArray.forEach((task) => {
+    const el = createElement(task);
+    taskField.appendChild(el);
+    // // creating elements
+    // const taskDiv = document.createElement("div");
+    // const taskInfoDiv = document.createElement("div");
+    // const taskP = document.createElement("p");
+    // const taskCheckBox = document.createElement("input");
+    // const taskAssignmentP = document.createElement("p");
+    // const taskDateP = document.createElement("p");
+    // const taskCompleteBtn = document.createElement("button");
+    // const taskDeleteBtn = document.createElement("button");
+    // const vr1 = document.createElement("hr");
+    // const vr2 = document.createElement("hr");
+    // const vr3 = document.createElement("hr");
 
-    // append
-    taskField.appendChild(taskDiv);
-    taskDiv.appendChild(taskInfoDiv);
-    taskInfoDiv.appendChild(taskP);
-    taskInfoDiv.appendChild(taskAssignmentP);
-    taskDiv.appendChild(vr1);
-    taskDiv.appendChild(taskCheckBox);
-    taskDiv.appendChild(vr2);
-    taskDiv.appendChild(taskDateP);
-    taskDiv.appendChild(vr3);
-    taskDiv.appendChild(taskCompleteBtn);
-    taskDiv.appendChild(taskDeleteBtn);
+    // // append
+    // taskField.appendChild(taskDiv);
+    // taskDiv.appendChild(taskInfoDiv);
+    // taskInfoDiv.appendChild(taskP);
+    // taskInfoDiv.appendChild(taskAssignmentP);
+    // taskDiv.appendChild(vr1);
+    // taskDiv.appendChild(taskCheckBox);
+    // taskDiv.appendChild(vr2);
+    // taskDiv.appendChild(taskDateP);
+    // taskDiv.appendChild(vr3);
+    // taskDiv.appendChild(taskCompleteBtn);
+    // taskDiv.appendChild(taskDeleteBtn);
 
-    // adding attributes
-    taskDiv.classList.add("task-container");
-    taskDiv.dataset.id = task.uniqueId;
-    taskInfoDiv.classList.add("task-info");
-    taskP.classList.add("task");
-    taskDateP.classList.add("shiftDate");
-    taskAssignmentP.classList.add("task-sub");
-    taskCheckBox.classList.add("js-myCheckbox");
-    taskCheckBox.setAttribute("type", "checkbox");
-    taskCompleteBtn.classList.add("completeBtn");
-    taskCompleteBtn.setAttribute("id", "js-completed-btn");
-    taskDeleteBtn.classList.add("deleteBtn");
-    taskDeleteBtn.setAttribute("id", "js-delete-btn");
-    vr1.classList.add("vr");
-    vr2.classList.add("vr");
-    vr3.classList.add("vr");
+    // // adding attributes
+    // taskDiv.classList.add("task-container");
+    // taskDiv.dataset.id = task.uniqueId;
+    // taskInfoDiv.classList.add("task-info");
+    // taskP.classList.add("task");
+    // taskDateP.classList.add("shiftDate");
+    // taskAssignmentP.classList.add("task-sub");
+    // taskCheckBox.classList.add("js-myCheckbox");
+    // taskCheckBox.setAttribute("type", "checkbox");
+    // taskCompleteBtn.classList.add("completeBtn");
+    // taskCompleteBtn.setAttribute("id", "js-completed-btn");
+    // taskDeleteBtn.classList.add("deleteBtn");
+    // taskDeleteBtn.setAttribute("id", "js-delete-btn");
+    // vr1.classList.add("vr");
+    // vr2.classList.add("vr");
+    // vr3.classList.add("vr");
 
-    // assiding values
-    taskP.innerText = task.task;
-    taskAssignmentP.innerText = task.taskAssignment;
-    taskDateP.innerText = task.shiftDate;
-    taskCompleteBtn.innerHTML = `<i class="fa fa-check"></i>`;
-    taskDeleteBtn.innerHTML = `<i class="fa fa-trash-o"></i>`;
+    // // assiding values
+    // taskP.innerText = task.task;
+    // taskAssignmentP.innerText = task.taskAssignment;
+    // taskDateP.innerText = task.shiftDate;
+    // taskCompleteBtn.innerHTML = `<i class="fa fa-check"></i>`;
+    // taskDeleteBtn.innerHTML = `<i class="fa fa-trash-o"></i>`;
 
-    // isCompleted strike-through
-    if (task.isCompleted === true) {
-      taskP.classList.add("strike");
-      taskCompleteBtn.innerHTML = `<i class="fa fa-close"></i>`;
-    } else {
-      taskCompleteBtn.innerHTML = `<i class="fa fa-check"></i>`;
-    }
-    // isChecked
-    if (task.isTracked === true) {
-      taskCheckBox.checked = true;
-    } else {
-      taskCheckBox.checked = false;
-    }
-
-    // if a new task
-    if (index === newIndex) {
-      taskDiv.classList.add("new");
-    }
+    // // isCompleted strike-through
+    // if (task.isCompleted === true) {
+    //   taskP.classList.add("strike");
+    //   taskCompleteBtn.innerHTML = `<i class="fa fa-close"></i>`;
+    // } else {
+    //   taskCompleteBtn.innerHTML = `<i class="fa fa-check"></i>`;
+    // }
+    // // isChecked
+    // if (task.isTracked === true) {
+    //   taskCheckBox.checked = true;
+    // } else {
+    //   taskCheckBox.checked = false;
+    // }
   });
+}
+function createElement(object) {
+  // creating elements
+  const taskDiv = document.createElement("div");
+  const taskInfoDiv = document.createElement("div");
+  const taskP = document.createElement("p");
+  const taskCheckBox = document.createElement("input");
+  const taskAssignmentP = document.createElement("p");
+  const taskDateP = document.createElement("p");
+  const taskCompleteBtn = document.createElement("button");
+  const taskDeleteBtn = document.createElement("button");
+  const vr1 = document.createElement("hr");
+  const vr2 = document.createElement("hr");
+  const vr3 = document.createElement("hr");
+
+  // append
+  taskDiv.appendChild(taskInfoDiv);
+  taskInfoDiv.appendChild(taskP);
+  taskInfoDiv.appendChild(taskAssignmentP);
+  taskDiv.appendChild(vr1);
+  taskDiv.appendChild(taskCheckBox);
+  taskDiv.appendChild(vr2);
+  taskDiv.appendChild(taskDateP);
+  taskDiv.appendChild(vr3);
+  taskDiv.appendChild(taskCompleteBtn);
+  taskDiv.appendChild(taskDeleteBtn);
+
+  // adding attributes
+  taskDiv.classList.add("task-container");
+  taskDiv.dataset.id = object.uniqueId;
+  taskInfoDiv.classList.add("task-info");
+  taskP.classList.add("task");
+  taskDateP.classList.add("shiftDate");
+  taskAssignmentP.classList.add("task-sub");
+  taskCheckBox.classList.add("js-myCheckbox");
+  taskCheckBox.setAttribute("type", "checkbox");
+  taskCompleteBtn.classList.add("completeBtn");
+  taskCompleteBtn.setAttribute("id", "js-completed-btn");
+  taskDeleteBtn.classList.add("deleteBtn");
+  taskDeleteBtn.setAttribute("id", "js-delete-btn");
+  vr1.classList.add("vr");
+  vr2.classList.add("vr");
+  vr3.classList.add("vr");
+
+  // assiding values
+  taskP.innerText = object.task;
+  taskAssignmentP.innerText = object.taskAssignment;
+  taskDateP.innerText = object.shiftDate;
+  taskCompleteBtn.innerHTML = `<i class="fa fa-check"></i>`;
+  taskDeleteBtn.innerHTML = `<i class="fa fa-trash-o"></i>`;
+
+  // isCompleted strike-through
+  if (object.isCompleted === true) {
+    taskP.classList.add("strike");
+    taskCompleteBtn.innerHTML = `<i class="fa fa-close"></i>`;
+  } else {
+    taskCompleteBtn.innerHTML = `<i class="fa fa-check"></i>`;
+  }
+  // isChecked
+  if (object.isTracked === true) {
+    taskCheckBox.checked = true;
+  } else {
+    taskCheckBox.checked = false;
+  }
+  // if (isNew) {
+  //   taskDiv.classList.add("new");
+  // }
+
+  return taskDiv; //because all the elements are in this div. It is like the final product fully assembled
 }
 function save() {
   localStorage.setItem("listOfTasks", JSON.stringify(tasks));
@@ -566,6 +651,9 @@ filterInput.addEventListener("change", (e) => {
     case "isCompletedFalse":
       filterArray(tasks, "isCompleted", false);
       break;
+    case "isTrackedTrue":
+      filterArray(tasks, "isTracked", true);
+      break;
     case "assigned":
       filterArray(tasks, "taskAssignment", "Assigned task");
       break;
@@ -619,7 +707,7 @@ taskField.addEventListener("click", (e) => {
   const index = tasks.findIndex((item) => item.uniqueId === taskDataSetId);
 
   if (deleteBtn) {
-    deleteTask(index, taskDataSetId);
+    deleteTask(index, targetBtnDiv);
   } else if (completeBtn) {
     updateCompleteStatus(index, taskName, completeBtn);
   } else if (targetCB) {
