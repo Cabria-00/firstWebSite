@@ -1,20 +1,35 @@
+// =========================================
 // html element to js object
+// =========================================
+
+// ======= Buttons ==============
 const addButton = document.querySelector(".addBtn");
+const floatButton = document.querySelector(".float-container");
+const searchBtn = document.querySelector(".searchBtn");
+const changelogBtn = document.querySelector(".changelog");
+const doDeleteAll = document.querySelector(".bulkDeleteBtn");
+const bulkAgreeBtn = document.querySelector(".bulkDeleteAgree");
+const bulkDisagreeBtn = document.querySelector(".bulkDeleteDisagree");
+
+// ======= Inputs ==============
 const inputField = document.querySelector("#js-input-field");
 const dateField = document.querySelector("#js-datePicker");
 const assignmentMethod = document.querySelector("#js-task-assignment");
+const searchField = document.querySelector(".searchField");
+const checkBoxes = document.querySelectorAll(".js-myCheckbox");
+
+// ======= Sidebars / other ==============
+const sidebar = document.querySelector(".taskCount");
+const changelogSidebar = document.querySelector(".changelog-sidebar");
+const tables = document.querySelectorAll("table");
+const changeSection = document.querySelector(".change-section");
+const backDrop = document.querySelector(".backdropD");
+
+// ======= For event delegation variables ==============
 const taskField = document.querySelector("section");
 const main = document.querySelectorAll("main");
-const sidebar = document.querySelector("aside");
-const floatButton = document.querySelector(".float-container");
-const tables = document.querySelectorAll("table");
-const checkBoxes = document.querySelectorAll(".js-myCheckbox");
-const searchField = document.querySelector(".searchField");
-const searchBtn = document.querySelector(".searchBtn");
-const changelogBtn = document.querySelector(".changelog");
-const changelogSidebar = document.querySelector(".changelog-sidebar");
-const changeSection = document.querySelector(".change-section");
-// dialogs
+
+// ======= Dialogs ==============
 const errorDialog = document.querySelector(".no-task-input");
 const completeDialog = document.querySelector(".task-completed");
 const deleteDialog = document.querySelector(".task-deleted");
@@ -23,12 +38,18 @@ const uncheckedDialog = document.querySelector(".task-unchecked");
 const cbTracked = document.querySelector(".task-tracked");
 const cbUntracked = document.querySelector(".task-untracked");
 const duplicateDialog = document.querySelector(".duplicate");
+const bulkDeleteDialog = document.querySelector(".bulkDeleteDialog");
+const bulkDeleteSuccessDialog = document.querySelector(".bulkDeleteSuccess");
+const bulkDeleteFailDialog = document.querySelector(".bulkDeleteFail");
 
-// task class blueprint
+// =========================================
+//  Other
+// =========================================
+
 class Task {
   constructor(task, taskAssigment, shiftDate) {
     this.task = task;
-    this.taskAssigment = taskAssigment || "-";
+    this.taskAssigment = taskAssigment || "  -";
     this.shiftDate = shiftDate || new Date().toISOString().split("T")[0];
     // this.taskNotes = taskNotes;
     this.isCompleted = false;
@@ -52,11 +73,8 @@ class Task {
   // set isCompleted(newStatus) {
   //   this._isCompleted = newStatus;
   // }
-}
-// task storage
-let tasks = JSON.parse(localStorage.getItem("listOfTasks")) || [];
-
-// changelog storage
+} // task class blueprint
+let tasks = JSON.parse(localStorage.getItem("listOfTasks")) || []; // task storage
 const changelog = [
   {
     Date: "April 5, 2026",
@@ -114,7 +132,7 @@ const changelog = [
   {
     Date: "April 10, 2026",
     Summary:
-      "Added the function of checking if a duplicate is already in the list, Also added a search functionality that will render the item if it is found and will inform the user if it is not found. Added the changelog to track all the progress made.",
+      "Added the function of checking if a duplicate is already in the list, Also added a search functionality that will render the item if it is found and will inform the user if it is not found. Added the changelog to track all the progress made. BUG: Found an issue that keeps both sidebar open at the same time.",
     Changes: [
       "Added 'duplicate' dialog",
       "Added 'duplicateChecker' function",
@@ -128,36 +146,30 @@ const changelog = [
     ],
   },
   {
-    Date: "Bug",
+    Date: "April 11, 2026",
     Summary:
-      "Found an issue with the rendering of the sidebar. Expected - If one sidebar is open the other will close. Actual - both are open at the same time",
+      "Fixed the issue about the sidebar. Added bulk delete option for removing all task in the list. Made the list items card-like. Added a slide-in animation for new items.",
     Changes: [
-      "Added 'add', 'mark as complete', and 'delete' button.",
-      "Added 'addTask' function",
-      "Added 'taskRendering' function",
+      "Fix the bug about the sidebar",
+      "Added 'bulkDelete'",
+      "Added 'dialogs' for bulk delete",
+      "Improved task list look",
+      "Refactor some codes",
     ],
   },
-];
+]; // changelog storage
 saveChangelog();
+taskRendering(tasks); //Initial rendering of task
+updateTaskCount(); // initial rendering of taskCount
 
-//Initial rendering of task
-taskRendering(tasks);
+// =========================================
+//  Functions
+// =========================================
 
-// initial rendering of taskCount
-updateTaskCount();
-
-function showDialog(dialogType, timer = 3000) {
-  document.querySelectorAll(".dialog").forEach((dialog) => {
-    dialog.classList.remove("showDialog");
-  });
-
-  dialogType.classList.add("showDialog");
-
-  window.setTimeout(() => {
-    dialogType.classList.remove("showDialog");
-  }, timer);
-}
+// button function
 function addTask() {
+  const newIndex = 0;
+
   if (inputField.value === "") {
     showDialog(errorDialog);
   } else {
@@ -174,7 +186,7 @@ function addTask() {
     save();
 
     //re-rendering of task to the display
-    taskRendering(tasks);
+    taskRendering(tasks, newIndex);
 
     // clearning input field
     inputField.value = "";
@@ -184,14 +196,173 @@ function addTask() {
     // update task count
     updateTaskCount();
   }
+} // Add button
+function deleteTask(index) {
+  // remove the item from the task array
+  // Note:for arrow functions, if it is inside a curly braces, put "return", if not, no need to put one.
+
+  // this returns an array wih the removed content
+  tasks.splice(index, 1);
+
+  // update ui
+  taskRendering(tasks);
+
+  //show/remove dialog
+  showDialog(deleteDialog);
+
+  // saving to localStorage
+  save();
+
+  // task count
+  updateTaskCount();
+} // delete button
+function updateCompleteStatus(index, taskName, taskButton) {
+  if (taskName.classList.contains("strike")) {
+    //remove strike-through
+    taskName.classList.remove("strike");
+
+    // setting isCompleted to false
+    tasks[index].isCompleted = false;
+
+    // change icon
+    taskButton.innerHTML = `<i class="fa fa-check"></i>`;
+
+    //show/remove dialog
+    showDialog(uncheckedDialog);
+
+    // saving to localStorage
+    save();
+    // task count
+    updateTaskCount();
+  } else {
+    // adding strike-through
+    taskName.classList.add("strike");
+    // setting isCompleted to true
+    tasks[index].isCompleted = true;
+
+    // change icon
+    taskButton.innerHTML = `<i class="fa fa-close"></i>`;
+
+    // show dialog
+    showDialog(completeDialog);
+    // saving to localStorage
+    save();
+    // task count
+    updateTaskCount();
+  }
+} // mark as complet button
+function itemSearch() {
+  const searchItem = searchField.value.trim();
+  const result = tasks.filter((item) => item.task === searchItem);
+
+  if (result.length > 0) {
+    taskRendering(result);
+  } else {
+    taskField.innerHTML = "";
+    // create element
+    const errorDiv = document.createElement("div");
+    const errorP = document.createElement("p");
+
+    // append
+    taskField.append(errorDiv);
+    errorDiv.append(errorP);
+
+    // adding attributes
+    errorDiv.classList.add("errorFormat");
+
+    // append
+    errorP.textContent = `'${searchItem}' not found`;
+  }
+} // search button
+function collapseSidebar() {
+  toggleSidebar(sidebar);
+} // open taskcount sidebar button
+function renderChangeLog() {
+  toggleSidebar(changelogSidebar);
+
+  changeSection.innerHTML = "";
+
+  const reversedChangelog = [...changelog].sort(
+    (a, b) => new Date(b.Date) - new Date(a.Date),
+  );
+
+  reversedChangelog.forEach((change) => {
+    // creating elements
+    const changeContainer = document.createElement("div");
+    const dateContainer = document.createElement("p");
+    const summaryContainer = document.createElement("p");
+    const hr = document.createElement("hr");
+
+    // appending elements
+    changeSection.appendChild(changeContainer);
+    changeContainer.appendChild(dateContainer);
+    changeContainer.appendChild(hr);
+    changeContainer.appendChild(summaryContainer);
+
+    // assigning attributes
+    changeContainer.classList.add("div-section");
+    dateContainer.classList.add("changeDate");
+    summaryContainer.classList.add("changeSummary");
+
+    // assigning text content
+    dateContainer.innerText = `${change.Date}`;
+    summaryContainer.innerText = `${change.Summary}`;
+  });
+} // open change log button
+function updateTrackerStatus(index, targetBtn) {
+  if (targetBtn.checked) {
+    tasks[index].isTracked = true;
+    showDialog(cbTracked);
+    save();
+  } else {
+    tasks[index].isTracked = false;
+    showDialog(cbUntracked);
+    save();
+  }
+} // checkboxes check/uncheck
+function bulkDelete() {
+  if (tasks.length === 0) {
+    closeBulkModal();
+    showDialog(bulkDeleteFailDialog);
+  } else {
+    tasks = [];
+    save();
+    taskRendering(tasks);
+    updateTaskCount();
+    closeBulkModal();
+
+    showDialog(bulkDeleteSuccessDialog);
+  }
+} // deleting all task in the list
+function openBulkModal() {
+  bulkDeleteDialog.style.opacity = 1;
+  bulkDeleteDialog.style.pointerEvents = "auto";
+  backDrop.classList.add("active");
+} // open the dialog for delete all
+function closeBulkModal() {
+  bulkDeleteDialog.style.opacity = 0;
+  backDrop.classList.remove("active");
+} // clsoe the dialog for delete all
+
+// backend function
+function showDialog(dialogType, timer = 3000) {
+  document.querySelectorAll(".dialog").forEach((dialog) => {
+    dialog.classList.remove("showDialog");
+  });
+
+  dialogType.classList.add("showDialog");
+
+  window.setTimeout(() => {
+    dialogType.classList.remove("showDialog");
+  }, timer);
 }
-function taskRendering(paramArray) {
+function taskRendering(paramArray, newIndex = null) {
   // reseting the task
   taskField.innerHTML = "";
-  createElement(paramArray);
+  createElement(paramArray, newIndex);
 }
-function createElement(paramArray) {
-  paramArray.forEach((task) => {
+function createElement(paramArray, newIndex) {
+  paramArray.forEach((task, index) => {
     // creating elements
     const taskDiv = document.createElement("div");
     const taskInfoDiv = document.createElement("div");
@@ -249,81 +420,21 @@ function createElement(paramArray) {
     } else {
       taskCompleteBtn.innerHTML = `<i class="fa fa-check"></i>`;
     }
-
+    // isChecked
     if (task.isTracked === true) {
       taskCheckBox.checked = true;
     } else {
       taskCheckBox.checked = false;
     }
+
+    // if a new task
+    if (index === newIndex) {
+      taskDiv.classList.add("new");
+    }
   });
-}
-function deleteTask(index) {
-  // remove the item from the task array
-  // Note:for arrow functions, if it is inside a curly braces, put "return", if not, no need to put one.
-
-  // this returns an array wih the removed content
-  tasks.splice(index, 1);
-
-  // update ui
-  taskRendering(tasks);
-
-  //show/remove dialog
-  showDialog(deleteDialog);
-
-  // saving to localStorage
-  save();
-
-  // task count
-  updateTaskCount();
-}
-function updateCompleteStatus(index, taskName, taskButton) {
-  if (taskName.classList.contains("strike")) {
-    //remove strike-through
-    taskName.classList.remove("strike");
-
-    // setting isCompleted to false
-    tasks[index].isCompleted = false;
-
-    // change icon
-    taskButton.innerHTML = `<i class="fa fa-check"></i>`;
-
-    //show/remove dialog
-    showDialog(uncheckedDialog);
-
-    // saving to localStorage
-    save();
-    // task count
-    updateTaskCount();
-  } else {
-    // adding strike-through
-    taskName.classList.add("strike");
-    // setting isCompleted to true
-    tasks[index].isCompleted = true;
-
-    // change icon
-    taskButton.innerHTML = `<i class="fa fa-close"></i>`;
-
-    // show dialog
-    showDialog(completeDialog);
-    // saving to localStorage
-    save();
-    // task count
-    updateTaskCount();
-  }
 }
 function save() {
   localStorage.setItem("listOfTasks", JSON.stringify(tasks));
-}
-function collapseSidebar() {
-  if (sidebar.classList.contains("showSideBar")) {
-    sidebar.classList.remove("showSideBar");
-    floatButton.querySelector("button").innerHTML =
-      `<i class="fa fa-plus"></i>`;
-  } else {
-    sidebar.classList.add("showSideBar");
-    floatButton.querySelector("button").innerHTML =
-      `<i class="fa fa-home"></i>`;
-  }
 }
 function countTask(array, key = "all", value) {
   if (key === "all") {
@@ -371,20 +482,11 @@ function updateTaskCount() {
     " - ",
   );
 }
-function updateTrackerStatus(index, targetBtn) {
-  if (targetBtn.checked) {
-    tasks[index].isTracked = true;
-    showDialog(cbTracked);
-    save();
-  } else {
-    tasks[index].isTracked = false;
-    showDialog(cbUntracked);
-    save();
-  }
-}
 function duplicateChecker() {
   const isDuplicate = tasks.some(
-    (item) => item.task === inputField.value.trim(),
+    (item) => item.task.toLowerCase() === inputField.value.trim().toLowerCase(),
+    // Ai suggested to add .toLowerCase() for case-sensitive searches
+    // I added toLowerCase at the end to complete the comparison.
   );
   if (isDuplicate) {
     showDialog(duplicateDialog);
@@ -393,57 +495,56 @@ function duplicateChecker() {
     addTask();
   }
 }
-function itemSearch() {
-  const searchItem = searchField.value.trim();
-  const result = tasks.filter((item) => item.task === searchItem);
-
-  if (result.length > 0) {
-    taskRendering(result);
-  } else {
-    taskField.innerHTML = "";
-    // create element
-    const errorDiv = document.createElement("div");
-    const errorP = document.createElement("p");
-
-    // append
-    taskField.append(errorDiv);
-    errorDiv.append(errorP);
-
-    // adding attributes
-    errorDiv.classList.add("errorFormat");
-
-    // append
-    errorP.textContent = `'${searchItem}' not found`;
-  }
-}
 function closeSearch() {
   taskRendering(tasks);
 }
 function saveChangelog() {
   localStorage.setItem("changelog", JSON.stringify(changelog));
 }
+function resetSidebar() {
+  document
+    .querySelectorAll(".sidebar")
+    .forEach((aside) => aside.classList.remove("showSideBar"));
+}
+function toggleSidebar(targetSidebar) {
+  const isOpen = targetSidebar.classList.contains("showSideBar");
 
-// button events
+  resetSidebar();
+
+  if (!isOpen) {
+    targetSidebar.classList.add("showSideBar");
+  }
+}
+
+// =============================================
+// Adding button events
+// =============================================
+
+// button
 addButton.addEventListener("click", duplicateChecker);
+floatButton.addEventListener("click", collapseSidebar);
+searchBtn.addEventListener("click", itemSearch);
+changelogBtn.addEventListener("click", renderChangeLog);
+doDeleteAll.addEventListener("click", openBulkModal);
+bulkAgreeBtn.addEventListener("click", bulkDelete);
+bulkDisagreeBtn.addEventListener("click", closeBulkModal);
 
+// event delegation / other
 inputField.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
     duplicateChecker();
   }
 });
-
 dateField.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
     duplicateChecker();
   }
 });
-
 assignmentMethod.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
     duplicateChecker();
   }
 });
-
 taskField.addEventListener("click", (e) => {
   // So my delete function uses splice method for deleting the task from the array list. It uses the data-id of the task to identify the task that needs to be removed. That is why it is necessary to get the it. In this code, it is stored in the variable "taskDataSetId".
 
@@ -468,9 +569,6 @@ taskField.addEventListener("click", (e) => {
     updateTrackerStatus(index, targetBtn);
   }
 });
-
-floatButton.addEventListener("click", collapseSidebar);
-searchBtn.addEventListener("click", itemSearch);
 searchField.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     itemSearch();
@@ -481,52 +579,3 @@ searchField.addEventListener("keydown", (e) => {
     closeSearch();
   }
 });
-
-changelogBtn.addEventListener("click", function () {
-  if (changelogSidebar.classList.contains("showSideBar")) {
-    changelogSidebar.classList.remove("showSideBar");
-    changelogBtn.querySelector("button").innerHTML =
-      `<i class="fa fa-info"></i>`;
-  } else {
-    changelogSidebar.classList.add("showSideBar");
-    renderChangeLog();
-    changelogBtn.querySelector("button").innerHTML =
-      `<i class="fa fa-home"></i>`;
-  }
-});
-
-function renderChangeLog() {
-  document
-    .querySelectorAll("aside")
-    .forEach((aside) => aside.classList.remove("showSideBar"));
-
-  changelogSidebar.classList.add("showSideBar");
-
-  changeSection.innerHTML = "";
-  const reversedChangelog = [...changelog].sort(
-    (a, b) => new Date(b.Date) - new Date(a.Date),
-  );
-
-  reversedChangelog.forEach((change) => {
-    // creating elements
-    const changeContainer = document.createElement("div");
-    const dateContainer = document.createElement("p");
-    const summaryContainer = document.createElement("p");
-    const hr = document.createElement("hr");
-
-    // appending elements
-    changeSection.appendChild(changeContainer);
-    changeContainer.appendChild(dateContainer);
-    changeContainer.appendChild(hr);
-    changeContainer.appendChild(summaryContainer);
-
-    // assigning attributes
-    changeContainer.classList.add("div-section");
-    dateContainer.classList.add("changeDate");
-    summaryContainer.classList.add("changeSummary");
-
-    // assigning text content
-    dateContainer.innerText = `${change.Date}`;
-    summaryContainer.innerText = `${change.Summary}`;
-  });
-}
