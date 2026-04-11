@@ -10,6 +10,7 @@ const changelogBtn = document.querySelector(".changelog");
 const doDeleteAll = document.querySelector(".bulkDeleteBtn");
 const bulkAgreeBtn = document.querySelector(".bulkDeleteAgree");
 const bulkDisagreeBtn = document.querySelector(".bulkDeleteDisagree");
+const filterViewBtn = document.querySelector(".filterBtn");
 
 // ======= Inputs ==============
 const inputField = document.querySelector("#js-input-field");
@@ -17,6 +18,8 @@ const dateField = document.querySelector("#js-datePicker");
 const assignmentMethod = document.querySelector("#js-task-assignment");
 const searchField = document.querySelector(".searchField");
 const checkBoxes = document.querySelectorAll(".js-myCheckbox");
+const filterInputContainer = document.querySelector(".filter-options");
+const filterInput = document.querySelector("#js-filter-options");
 
 // ======= Sidebars / other ==============
 const sidebar = document.querySelector(".taskCount");
@@ -47,9 +50,9 @@ const bulkDeleteFailDialog = document.querySelector(".bulkDeleteFail");
 // =========================================
 
 class Task {
-  constructor(task, taskAssigment, shiftDate) {
+  constructor(task, taskAssignment, shiftDate) {
     this.task = task;
-    this.taskAssigment = taskAssigment || "  -";
+    this.taskAssignment = taskAssignment || "-";
     this.shiftDate = shiftDate || new Date().toISOString().split("T")[0];
     // this.taskNotes = taskNotes;
     this.isCompleted = false;
@@ -78,7 +81,7 @@ let tasks = JSON.parse(localStorage.getItem("listOfTasks")) || []; // task stora
 const changelog = [
   {
     Date: "April 5, 2026",
-    Summary: "Initial layout of the tracker. It only has add functionality.",
+    Summary: "Created the initial tracker layout with support for adding tasks",
     Changes: [
       "Added 'add', 'mark as complete', and 'delete' button.",
       "Added 'addTask' function",
@@ -88,7 +91,7 @@ const changelog = [
   {
     Date: "April 6, 2026",
     Summary:
-      "Created a 'Task' class that would be the blueprint of the task. It has taskName, taskDate, and isCompleted as the keys. Also enable of saving the tasks in the localStorage. Adding task now prompts a dialog to appear and added the ability to add task by entering the 'enter' key.",
+      "Added a task factory and localStorage support. Adding a task now shows a dialog, and tasks can also be added by pressing the Enter key.",
     Changes: [
       "Added 'Task' class",
       "Added 'save' to JSON",
@@ -100,7 +103,7 @@ const changelog = [
   {
     Date: "April 7, 2026",
     Summary:
-      "Added other dialogs that will pop up depending on the event.Created a function for each event for ease of use and triggering to make the project easily scalable. Added the delete and update functionality",
+      "Added event-based dialogs, created reusable handler functions for easier scaling, and introduced delete and update functionality.",
     Changes: [
       "Added 'showDialog' function",
       "Added 'save' function",
@@ -111,7 +114,7 @@ const changelog = [
   {
     Date: "April 8, 2026",
     Summary:
-      "Added a sidebar that will show the total number of task depending if complete or not and task assignment.",
+      "Added a sidebar that shows the total number of tasks by completion status and task assignment.",
     Changes: [
       "Added 'task-assigment' input",
       "Added 'taskCount' function",
@@ -122,7 +125,7 @@ const changelog = [
   {
     Date: "April 9, 2026",
     Summary:
-      "Added checkboxes that indicates if an item is tracked in the tracker. Refactor the code. Made the new task to appear on top.",
+      "Added tracking checkboxes, refactored the codebase, and displayed newly added tasks at the top of the list.",
     Changes: [
       "Added 'checkboxes'.",
       "Added 'checkbox' dialogs",
@@ -132,7 +135,7 @@ const changelog = [
   {
     Date: "April 10, 2026",
     Summary:
-      "Added the function of checking if a duplicate is already in the list, Also added a search functionality that will render the item if it is found and will inform the user if it is not found. Added the changelog to track all the progress made. BUG: Found an issue that keeps both sidebar open at the same time.",
+      "Added duplicate detection, search with not-found feedback, and a changelog for tracking progress. Bug: both sidebars can stay open at the same time.",
     Changes: [
       "Added 'duplicate' dialog",
       "Added 'duplicateChecker' function",
@@ -148,13 +151,14 @@ const changelog = [
   {
     Date: "April 11, 2026",
     Summary:
-      "Fixed the issue about the sidebar. Added bulk delete option for removing all task in the list. Made the list items card-like. Added a slide-in animation for new items.",
+      "Fixed the sidebar issue, added bulk delete, gave list items a card-style layout, introduced slide-in animations for new items, and added filters for status and task assignment.",
     Changes: [
       "Fix the bug about the sidebar",
       "Added 'bulkDelete'",
       "Added 'dialogs' for bulk delete",
       "Improved task list look",
       "Refactor some codes",
+      "Added 'filter' function",
     ],
   },
 ]; // changelog storage
@@ -342,7 +346,17 @@ function openBulkModal() {
 function closeBulkModal() {
   bulkDeleteDialog.style.opacity = 0;
   backDrop.classList.remove("active");
-} // clsoe the dialog for delete all
+} // close the dialog for delete all
+function showFilterOptions() {
+  const isOpen = filterInputContainer.classList.contains("show");
+
+  if (isOpen) {
+    filterInputContainer.classList.remove("show");
+    taskRendering(tasks);
+  } else {
+    filterInputContainer.classList.add("show");
+  }
+}
 
 // backend function
 function showDialog(dialogType, timer = 3000) {
@@ -408,7 +422,7 @@ function createElement(paramArray, newIndex) {
 
     // assiding values
     taskP.innerText = task.task;
-    taskAssignmentP.innerText = task.taskAssigment;
+    taskAssignmentP.innerText = task.taskAssignment;
     taskDateP.innerText = task.shiftDate;
     taskCompleteBtn.innerHTML = `<i class="fa fa-check"></i>`;
     taskDeleteBtn.innerHTML = `<i class="fa fa-trash-o"></i>`;
@@ -458,28 +472,28 @@ function updateTaskCount() {
   );
   tables[1].querySelector(".js-assigned").innerText = countTask(
     tasks,
-    "taskAssigment",
+    "taskAssignment",
     "Assigned task",
   );
   tables[1].querySelector(".js-grabbed").innerText = countTask(
     tasks,
-    "taskAssigment",
+    "taskAssignment",
     "Grabbed task",
   );
   tables[1].querySelector(".js-previously").innerText = countTask(
     tasks,
-    "taskAssigment",
+    "taskAssignment",
     "Previously worked on",
   );
   tables[1].querySelector(".js-endorsed").innerText = countTask(
     tasks,
-    "taskAssigment",
+    "taskAssignment",
     "Endorsed to me",
   );
   tables[1].querySelector(".js-none").innerText = countTask(
     tasks,
-    "taskAssigment",
-    " - ",
+    "taskAssignment",
+    "-",
   );
 }
 function duplicateChecker() {
@@ -515,6 +529,20 @@ function toggleSidebar(targetSidebar) {
     targetSidebar.classList.add("showSideBar");
   }
 }
+function filterArray(paramArray, filterBy, filterValue) {
+  const filteredArray = paramArray.filter(
+    (item) => item[filterBy] === filterValue,
+  );
+  const value = filterInput.value;
+  console.log(value);
+
+  if (filteredArray.length === 0) {
+    taskField.innerHTML = `<p class='errorFormat'>No results found<p>`;
+    return;
+  }
+
+  taskRendering(filteredArray);
+}
 
 // =============================================
 // Adding button events
@@ -528,6 +556,36 @@ changelogBtn.addEventListener("click", renderChangeLog);
 doDeleteAll.addEventListener("click", openBulkModal);
 bulkAgreeBtn.addEventListener("click", bulkDelete);
 bulkDisagreeBtn.addEventListener("click", closeBulkModal);
+filterViewBtn.addEventListener("click", showFilterOptions);
+filterInput.addEventListener("change", (e) => {
+  const selectedOption = e.target.value;
+
+  switch (selectedOption) {
+    case "isCompletedTrue":
+      filterArray(tasks, "isCompleted", true);
+      break;
+    case "isCompletedFalse":
+      filterArray(tasks, "isCompleted", false);
+      break;
+    case "assigned":
+      filterArray(tasks, "taskAssignment", "Assigned Task");
+      break;
+    case "grabbed":
+      filterArray(tasks, "taskAssignment", "Grabbed Task");
+      break;
+    case "previously-worked":
+      filterArray(tasks, "taskAssignment", "Previously worked on");
+      break;
+    case "endorsed":
+      filterArray(tasks, "taskAssignment", "Endorsed to me");
+      break;
+    case "no-tag":
+      filterArray(tasks, "taskAssignment", "-");
+      break;
+    default:
+      console.log("None selected");
+  }
+});
 
 // event delegation / other
 inputField.addEventListener("keydown", function (e) {
