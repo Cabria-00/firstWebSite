@@ -51,7 +51,6 @@
           placeholder="Search"
         />
         <button class="searchBtn"><i class="fa fa-search"></i></button>
-        <!-- <button><i class="fa fa-filter"></i></button> -->
       </div>
     </div>
     <section class="card">
@@ -103,16 +102,30 @@
       <p>Delete action failed: Task list is empty!</p>
     </div>
 
+    <!-- floating buttons -->
     <div class="float-container">
       <button><i class="fa fa-plus"></i></button>
     </div>
-
     <div class="changelog">
       <button><i class="fa fa-info"></i></button>
     </div>
-
     <div class="bulkDelete">
       <button class="bulkDeleteBtn"><i class="fa fa-trash"></i></button>
+    </div>
+    <div class="filter">
+      <button class="filterBtn"><i class="fa fa-filter"></i></button>
+    </div>
+
+    <div class="filter-options">
+      <select name="filter-options" id="js-filter-options">
+        <option value="isCompletedTrue" selected>Completed</option>
+        <option value="isCompletedFalse">Not yet Completed</option>
+        <option value="assigned">Assigned task</option>
+        <option value="grabbed">Grabbed task</option>
+        <option value="previously-worked">Previously worked on</option>
+        <option value="endorsed">Endorsed to me</option>
+        <option value="no-tag">-</option>
+      </select>
     </div>
 
     <!-- sidebar for task coung -->
