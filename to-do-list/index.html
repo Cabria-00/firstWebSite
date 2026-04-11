@@ -96,6 +96,12 @@
     <div class="dialog duplicate">
       <p>Task already exist</p>
     </div>
+    <div class="dialog bulkDeleteSuccess">
+      <p>Deleted all task succesfully</p>
+    </div>
+    <div class="dialog bulkDeleteFail">
+      <p>Delete action failed: Task list is empty!</p>
+    </div>
 
     <div class="float-container">
       <button><i class="fa fa-plus"></i></button>
@@ -105,8 +111,12 @@
       <button><i class="fa fa-info"></i></button>
     </div>
 
+    <div class="bulkDelete">
+      <button class="bulkDeleteBtn"><i class="fa fa-trash"></i></button>
+    </div>
+
     <!-- sidebar for task coung -->
-    <aside class="taskCount">
+    <aside class="sidebar taskCount">
       <h1 class="taskStats">WIP: Task summary</h1>
       <hr />
       <br />
@@ -162,7 +172,7 @@
     </aside>
 
     <!-- sidebar for changelog -->
-    <aside class="changelog-sidebar">
+    <aside class="sidebar changelog-sidebar">
       <h1>Updates</h1>
       <hr />
       <div class="change-section"></div>
@@ -171,5 +181,17 @@
         <p class="changeSummary"></p>
       </div> -->
     </aside>
+    <div class="bulkDeleteDialog">
+      <p>Delete all Task?</p>
+      <div class="butContainer">
+        <button class="bulkDeleteDisagree">
+          <i class="fa fa-times-circle"></i>
+        </button>
+        <button class="bulkDeleteAgree">
+          <i class="fa fa-check-circle"></i>
+        </button>
+      </div>
+    </div>
+    <div class="backdropD"></div>
   </body>
 </html>
