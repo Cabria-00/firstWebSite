@@ -353,6 +353,7 @@ function showFilterOptions() {
   if (isOpen) {
     filterInputContainer.classList.remove("show");
     taskRendering(tasks);
+    filterInput.selectedIndex = 0;
   } else {
     filterInputContainer.classList.add("show");
   }
@@ -568,10 +569,10 @@ filterInput.addEventListener("change", (e) => {
       filterArray(tasks, "isCompleted", false);
       break;
     case "assigned":
-      filterArray(tasks, "taskAssignment", "Assigned Task");
+      filterArray(tasks, "taskAssignment", "Assigned task");
       break;
     case "grabbed":
-      filterArray(tasks, "taskAssignment", "Grabbed Task");
+      filterArray(tasks, "taskAssignment", "Grabbed task");
       break;
     case "previously-worked":
       filterArray(tasks, "taskAssignment", "Previously worked on");
