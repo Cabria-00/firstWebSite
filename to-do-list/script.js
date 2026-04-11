@@ -534,8 +534,6 @@ function filterArray(paramArray, filterBy, filterValue) {
   const filteredArray = paramArray.filter(
     (item) => item[filterBy] === filterValue,
   );
-  const value = filterInput.value;
-  console.log(value);
 
   if (filteredArray.length === 0) {
     taskField.innerHTML = `<p class='errorFormat'>No results found<p>`;
