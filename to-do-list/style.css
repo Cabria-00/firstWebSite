@@ -12,6 +12,8 @@ body {
   background-position: center;
   background-size: cover;
 
+  /* background: linear-gradient(135deg, #ffafbd, #ffc3a0, #cdb4db); */
+
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -252,6 +254,23 @@ div.header {
   position: absolute;
   bottom: 50px;
   right: 140px;
+}
+.filter {
+  position: absolute;
+  bottom: 90px;
+  right: 140px;
+}
+.filter-options {
+  position: absolute;
+  bottom: 90px;
+  right: 185px;
+  display: none;
+}
+.filter-options.show {
+  position: absolute;
+  bottom: 90px;
+  right: 185px;
+  display: block;
 }
 
 aside {
