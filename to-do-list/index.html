@@ -1,444 +1,212 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To do list</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Noto+Sans+Linear+A:regular"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+  </head>
+  <body>
+    <main class="card">
+      <input
+        type="text"
+        class="inputField"
+        id="js-input-field"
+        placeholder="Type a task"
+        required
+      />
+      <select name="task-assignment" id="js-task-assignment">
+        <option value="-" selected disabled>Task Assignment</option>
+        <option value="Assigned task">Assigned Task</option>
+        <option value="Grabbed task">Grabbed task</option>
+        <option value="Previously worked on">Previously worked on</option>
+        <option value="Endorsed to me">Endorsed to me</option>
+      </select>
 
-body {
-  min-height: 100vh;
-  min-width: 100vw;
-  background-image: url(https://c4.wallpaperflare.com/wallpaper/264/558/535/busy-coffee-computer-corporate-wallpaper-preview.jpg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
+      <input type="date" class="date inputField" id="js-datePicker" />
+      <button class="addBtn">
+        <i class="fa fa-plus-square-o"></i>
+      </button>
+    </main>
+    <div class="header card">
+      <p class="task-name">Task</p>
+      <hr class="vr" />
+      <p class="isTracked">Tracked</p>
+      <hr class="vr" />
+      <p class="target-date">Date</p>
+      <hr class="vr" />
+      <div class="option">
+        <input
+          type="text"
+          class="inputField searchField"
+          placeholder="Search"
+        />
+        <button class="searchBtn"><i class="fa fa-search"></i></button>
+      </div>
+    </div>
+    <section class="card">
+      <!-- <div class="task-container">
+        <div class="task-info">
+          <p class="task">task name</p>
+          <p class="task-sub">task assignment goes here</p>
+        </div>
+        <input type="checkbox" class="js-myCheckbox" />
+        <p class="shiftDate">date goes here</p>
+        <button class="completeBtn" id="js-completed-btn">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button class="deleteBtn" id="js-delete-btn">
+          <i class="fa fa-trash-o"></i>
+        </button>
+      </div> -->
+    </section>
 
-  /* background: linear-gradient(135deg, #ffafbd, #ffc3a0, #cdb4db); */
+    <!-- dialogs -->
+    <div class="dialog no-task-input">
+      <p>Please enter some task!</p>
+    </div>
+    <div class="dialog task-completed">
+      <p>Task marked as completed!</p>
+    </div>
+    <div class="dialog task-deleted">
+      <p>Task succesfully deleted!</p>
+    </div>
+    <div class="dialog task-added">
+      <p>Task Added!</p>
+    </div>
+    <div class="dialog task-unchecked">
+      <p>Task marked as not completed!</p>
+    </div>
+    <div class="dialog task-tracked">
+      <p>Task is "Tracked" in the tracker!</p>
+    </div>
+    <div class="dialog task-untracked">
+      <p>Task is marked as "Not yet tracked"</p>
+    </div>
+    <div class="dialog duplicate">
+      <p>Task already exist</p>
+    </div>
+    <div class="dialog bulkDeleteSuccess">
+      <p>Deleted all task succesfully</p>
+    </div>
+    <div class="dialog bulkDeleteFail">
+      <p>Delete action failed: Task list is empty!</p>
+    </div>
 
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: auto;
-  align-items: center;
-  gap: 1rem;
+    <!-- floating buttons -->
+    <div class="float-container">
+      <button><i class="fa fa-plus"></i></button>
+    </div>
+    <div class="changelog">
+      <button><i class="fa fa-info"></i></button>
+    </div>
+    <div class="bulkDelete">
+      <button class="bulkDeleteBtn"><i class="fa fa-trash"></i></button>
+    </div>
+    <div class="filter">
+      <button class="filterBtn"><i class="fa fa-filter"></i></button>
+    </div>
 
-  font-family: "Noto sans", Helvetica, sans-serif;
+    <div class="filter-options">
+      <select name="filter-options" id="js-filter-options">
+        <option value="*" selected disabled>Filter by</option>
+        <option value="isCompletedTrue">Completed</option>
+        <option value="isCompletedFalse">Not yet Completed</option>
+        <option value="isTrackedTrue">Tracked in the Tracker</option>
+        <option value="assigned">Assigned task</option>
+        <option value="grabbed">Grabbed task</option>
+        <option value="previously-worked">Previously worked on</option>
+        <option value="endorsed">Endorsed to me</option>
+        <option value="no-tag">-</option>
+      </select>
+    </div>
 
-  position: relative;
-}
+    <!-- sidebar for task coung -->
+    <aside class="sidebar taskCount">
+      <h1 class="taskStats">WIP: Task summary</h1>
+      <hr />
+      <br />
+      <table class="js-table-one">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th><p class="js-total-task">0</p></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Completed</td>
+            <td><p class="js-touched">0</p></td>
+          </tr>
+          <tr>
+            <td>Not yet started</td>
+            <td><p class="js-not-touched">0</p></td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <!-- by task assignment -->
+      <table class="js-table-two">
+        <thead>
+          <tr>
+            <th colspan="2">By task assignment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Assigned</td>
+            <td><p class="js-assigned">0</p></td>
+          </tr>
+          <tr>
+            <td>Grabbed task</td>
+            <td><p class="js-grabbed">0</p></td>
+          </tr>
+          <tr>
+            <td>Previously worked on</td>
+            <td><p class="js-previously">0</p></td>
+          </tr>
+          <tr>
+            <td>Endorsed to me</td>
+            <td><p class="js-endorsed">0</p></td>
+          </tr>
+          <tr>
+            <td>-</td>
+            <td><p class="js-none">0</p></td>
+          </tr>
+        </tbody>
+      </table>
+    </aside>
 
-/* general styling */
-.card {
-  background-color: hsla(0, 0%, 100%, 0.3);
-  backdrop-filter: blur(10px);
-  padding: 1rem;
-  border-radius: 1rem;
-  min-width: 40vw;
-  margin: 0 auto;
-
-  font-size: 1.4rem;
-
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.753);
-
-  display: flex;
-  gap: 0.5rem;
-}
-
-section {
-  display: flex;
-  flex-direction: column;
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
-  overflow-y: auto; /*Puts scrollbar when to many items*/
-  scrollbar-width: none; /*hides scrollbar but sill scrollable*/
-  max-height: 70vh;
-}
-
-input {
-  height: 2rem;
-  border-radius: 1rem;
-  padding-left: 1rem;
-}
-
-input[type="date"] {
-  padding: 0 1rem;
-  flex: 1;
-}
-
-input[type="checkbox"] {
-  width: 1.2rem;
-  height: 1.2rem;
-  cursor: pointer;
-  accent-color: #38bdf8;
-  border: 2px solid #999;
-  flex: 1;
-  justify-content: flex-start;
-}
-
-select {
-  border-radius: 1rem;
-  padding: 0.5rem;
-  flex: 1;
-  outline-color: rgb(137, 221, 137);
-  background-color: hsla(0, 0%, 100%, 0.6);
-  border: none;
-}
-
-button {
-  height: 2rem;
-  width: 2rem;
-  border-radius: 0.7rem;
-  border: none;
-  font-size: 1.4rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 200ms ease-in-out;
-  opacity: 0.9;
-}
-
-button:hover {
-  transform: scale(1.1);
-  opacity: 1;
-}
-
-.dialog {
-  font-size: 1rem;
-  padding: 1rem;
-  border-radius: 1rem;
-  border: none;
-  position: fixed;
-  top: 100px;
-  right: 10px;
-  background-color: white;
-  display: none;
-  box-shadow: 1px 1px 10px whitesmoke;
-}
-
-.showDialog {
-  right: -300px;
-  animation-name: dialogSlideInNOut;
-  animation-duration: 3s;
-  animation-timing-function: ease-in-out;
-  display: block;
-}
-
-@keyframes dialogSlideInNOut {
-  0% {
-    right: -200px;
-  }
-  20% {
-    right: 10px; /*slides in*/
-  }
-  90% {
-    right: 10px; /*stay*/
-  }
-  100% {
-    right: -200px;
-  }
-}
-
-i {
-  pointer-events: none;
-}
-
-.task-container {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-
-  padding: 0.4rem 0.6rem;
-
-  background-color: rgba(255, 255, 255, 0.6);
-
-  border-radius: 1rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-
-  transition: 200ms ease-in-out;
-}
-
-.task-container:hover {
-  background-color: #d1d1d1;
-}
-
-.task-info {
-  display: flex;
-  flex-direction: column;
-}
-
-/* specific styling */
-
-.inputField {
-  flex: 6;
-  outline-color: rgb(137, 221, 137);
-  background-color: hsla(0, 0%, 100%, 0.6);
-  border: none;
-}
-
-.addBtn,
-.task-added,
-.task-completed,
-.task-tracked,
-.bulkDeleteAgree,
-.bulkDeleteSuccess {
-  flex: 1;
-  background-color: rgb(137, 221, 137);
-}
-
-.task-info {
-  flex: 4;
-}
-
-.task-sub {
-  font-size: 1rem;
-  margin: 0.3rem 0;
-  font-style: italic;
-}
-.shiftDate {
-  flex: 3;
-  justify-content: flex-start;
-}
-.completeBtn,
-.deleteBtn {
-  flex: 1;
-}
-
-.completeBtn,
-.no-task-input,
-.task-unchecked,
-.task-untracked,
-.duplicate {
-  background-color: rgb(236, 236, 116);
-}
-
-.deleteBtn,
-.task-deleted,
-.bulkDeleteDisagree,
-.bulkDeleteFail {
-  background-color: rgba(253, 62, 62, 0.8);
-}
-
-.strike {
-  text-decoration: line-through;
-}
-
-div.header {
-  display: flex;
-  /* border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0; */
-  align-items: center;
-}
-
-.task-name {
-  flex: 3;
-}
-.target-date {
-  flex: 1;
-}
-.option {
-  display: flex;
-  gap: 0.5rem;
-  flex: 1;
-}
-
-.vr {
-  width: 2px;
-  height: 1rem;
-  margin-right: 1rem;
-}
-
-.float-container {
-  position: absolute;
-  bottom: 90px;
-  right: 100px;
-}
-.changelog {
-  position: absolute;
-  bottom: 50px;
-  right: 100px;
-}
-.bulkDelete {
-  position: absolute;
-  bottom: 50px;
-  right: 140px;
-}
-.filter {
-  position: absolute;
-  bottom: 90px;
-  right: 140px;
-}
-.filter-options {
-  position: absolute;
-  bottom: 90px;
-  right: 185px;
-  display: none;
-}
-.filter-options.show {
-  position: absolute;
-  bottom: 90px;
-  right: 185px;
-  display: block;
-}
-
-aside {
-  width: 25vw;
-  position: absolute;
-
-  left: 0;
-  bottom: 0;
-  top: 0;
-
-  background-color: hsla(0, 0%, 100%, 0.3);
-  backdrop-filter: blur(10px);
-  padding: 1rem;
-  border-radius: 1rem;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.753);
-
-  transform: translateX(-300px);
-  opacity: 0;
-  transition:
-    transform 0.5s ease,
-    opacity 0.5s ease;
-}
-
-.sidebar.taskCount.showSideBar,
-.sidebar.changelog-sidebar.showSideBar {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-aside h1 {
-  color: #111;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-aside hr {
-  height: 3px;
-}
-
-/* table general layout */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1.5rem;
-}
-
-th,
-td {
-  padding: 10px 15px;
-  border: 1px solid #fce4e4;
-}
-
-.js-touched,
-.js-not-touched {
-  text-align: center;
-}
-
-.errorFormat {
-  text-align: center;
-  font-style: italic;
-  font-size: medium;
-}
-
-aside .div-section {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-
-  border-radius: 1rem;
-  padding: 0.6rem;
-  margin: 10px 0;
-  background-color: rgba(255, 255, 255, 0.5);
-}
-
-.change-section {
-  height: 95%;
-  font-size: 1.1rem;
-  overflow-y: scroll;
-  scrollbar-width: none;
-}
-
-.bulkDeleteDialog {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  height: 100px;
-  width: 200px;
-
-  padding: 1rem;
-  border-radius: 1rem;
-  border: none;
-  background-color: rgba(255, 255, 255, 1);
-
-  opacity: 0;
-  pointer-events: none;
-
-  z-index: 999;
-}
-.butContainer {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-
-  button {
-    flex: 1;
-  }
-}
-
-.backdropD {
-  background-color: rgba(0, 0, 0, 0.3);
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  display: none;
-  pointer-events: none;
-  z-index: 1;
-}
-.backdropD.active {
-  background-color: rgba(0, 0, 0, 0.3);
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  display: block;
-  pointer-events: all;
-  z-index: 998;
-}
-
-.new {
-  transform: translateX(0);
-  animation-name: popIn;
-  animation-duration: 1s;
-  animation-timing-function: ease-in-out;
-}
-
-@keyframes popIn {
-  from {
-    transform: translateX(-50px) scale(0.95);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0px) scale(1);
-    opacity: 1;
-  }
-}
-
-.task-container.remove {
-  animation-name: removeAnimation;
-  animation-timing-function: ease-in-out;
-  animation-duration: 1s;
-}
-
-@keyframes removeAnimation {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(0);
-    opacity: 0;
-  }
-}
+    <!-- sidebar for changelog -->
+    <aside class="sidebar changelog-sidebar">
+      <h1>Updates</h1>
+      <hr />
+      <div class="change-section"></div>
+      <!-- <div class="div-section">
+        <p class="changeDate"></p>
+        <p class="changeSummary"></p>
+      </div> -->
+    </aside>
+    <div class="bulkDeleteDialog">
+      <p>Delete all Task?</p>
+      <div class="butContainer">
+        <button class="bulkDeleteDisagree">
+          <i class="fa fa-times-circle"></i>
+        </button>
+        <button class="bulkDeleteAgree">
+          <i class="fa fa-check-circle"></i>
+        </button>
+      </div>
+    </div>
+    <div class="backdropD"></div>
+  </body>
+</html>
