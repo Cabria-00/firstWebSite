@@ -164,6 +164,15 @@ const changelog = [
       "Refactored the createElement function.",
     ],
   },
+  {
+    Date: "April 12, 2026",
+    Summary:
+      "Change the animation for new task to bounce and deleted task to elastic.",
+    Changes: [
+      "Added bounce animation for new task.",
+      "Added elastic animation for deleted task."
+    ],
+  }
 ]; // changelog storage
 saveChangelog();
 taskRendering(tasks); //Initial rendering of task
