@@ -524,3 +524,15 @@ aside .div-section {
     opacity: 0;
   }
 }
+
+.assigned {
+  color: hsl(135, 100%, 30%);
+  padding: 0.2rem;
+  font-weight: bold;
+}
+
+.endorsed {
+  color: rgb(218, 67, 40);
+  padding: 0.2rem;
+  font-weight: bold;
+}
