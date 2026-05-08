@@ -188,7 +188,7 @@ const changelog = [
 saveChangelog();
 taskRendering(tasks); //Initial rendering of task
 updateTaskCount(); // initial rendering of taskCount
-let isSearch = false;
+let isSearch = true;
 
 // =========================================
 //  Functions
@@ -292,13 +292,6 @@ function updateCompleteStatus(index, taskName, taskButton) {
   }
 } // mark as complet button
 function itemSearch() {
-  if (isSearch) {
-    closeSearch();
-    searchField.value = "";
-    return;
-  }
-  isSearch = true;
-
   const searchItem = searchField.value.trim();
   if (!searchItem) return;
   searchBtn.innerHTML = `<i class="fa fa-close"></i>`;
@@ -682,7 +675,16 @@ function showCopySuccess(element, text) {
 // button
 addButton.addEventListener("click", duplicateChecker);
 floatButton.addEventListener("click", collapseSidebar);
-searchBtn.addEventListener("click", itemSearch);
+searchBtn.addEventListener("click", () => {
+  if (isSearch) {
+    closeSearch();
+    searchField.value = "";
+    isSearch = false;
+    return;
+  }
+  isSearch = true;
+  itemSearch();
+});
 changelogBtn.addEventListener("click", renderChangeLog);
 doDeleteAll.addEventListener("click", openBulkModal);
 bulkAgreeBtn.addEventListener("click", bulkDelete);
@@ -763,16 +765,20 @@ taskField.addEventListener("click", (e) => {
     updateTrackerStatus(index, targetBtn);
   } else if (copyBtn) {
     const targetText = copyBtn.parentElement.querySelector(".task").textContent; // needs to be inside for proper deletion
+
     showCopySuccess(copyBtn, targetText);
   }
 });
 searchField.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
+    isSearch = true;
     itemSearch();
   } else if (e.key === "Escape") {
+    isSearch = false;
     closeSearch();
     searchField.value = "";
   } else if (!searchField.value) {
+    isSearch = false;
     closeSearch();
   }
 });
