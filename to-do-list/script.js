@@ -558,6 +558,15 @@ function createElement(object) {
   } else {
     taskCheckBox.checked = false;
   }
+
+  if (
+    object.taskAssignment === "Assigned task" ||
+    object.taskAssignment === "Grabbed task"
+  ) {
+    taskAssignmentP.classList.add("assigned");
+  } else {
+    taskAssignmentP.classList.add("endorsed");
+  }
   // if (isNew) {
   //   taskDiv.classList.add("new");
   // }
