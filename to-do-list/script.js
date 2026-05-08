@@ -52,7 +52,7 @@ const bulkDeleteFailDialog = document.querySelector(".bulkDeleteFail");
 class Task {
   constructor(task, taskAssignment, shiftDate) {
     this.task = task;
-    this.taskAssignment = taskAssignment || "-";
+    this.taskAssignment = taskAssignment || "Assigned task";
     this.shiftDate = shiftDate || new Date().toISOString().split("T")[0];
     // this.taskNotes = taskNotes;
     this.isCompleted = false;
@@ -170,13 +170,25 @@ const changelog = [
       "Change the animation for new task to bounce and deleted task to elastic.",
     Changes: [
       "Added bounce animation for new task.",
-      "Added elastic animation for deleted task."
+      "Added elastic animation for deleted task.",
     ],
-  }
+  },
+  {
+    Date: "May 8, 2026",
+    Summary:
+      "Implemented a copy button, improve UI for search button, set default task assigment to 'Assigned Task' and refined the sidebar layout.",
+    Changes: [
+      "Added copy functionality.",
+      "Modified the width of the sidebar from 25vw to 400px.",
+      "Set the default task assignment to 'Assigned Task",
+      "Improve UI for search button. Can now close the search function by clicking the x button.",
+    ],
+  },
 ]; // changelog storage
 saveChangelog();
 taskRendering(tasks); //Initial rendering of task
 updateTaskCount(); // initial rendering of taskCount
+let isSearch = false;
 
 // =========================================
 //  Functions
@@ -213,8 +225,7 @@ function addTask() {
 
   // update task count
   updateTaskCount();
-}
-// Add button
+} // Add button
 function deleteTask(index, taskItem) {
   // remove the item from the task array
   // Note:for arrow functions, if it is inside a curly braces, put "return", if not, no need to put one.
@@ -281,7 +292,16 @@ function updateCompleteStatus(index, taskName, taskButton) {
   }
 } // mark as complet button
 function itemSearch() {
+  if (isSearch) {
+    closeSearch();
+    searchField.value = "";
+    return;
+  }
+  isSearch = true;
+
   const searchItem = searchField.value.trim();
+  if (!searchItem) return;
+  searchBtn.innerHTML = `<i class="fa fa-close"></i>`;
   const result = tasks.filter(
     (item) => item.task.toLowerCase() === searchItem.toLowerCase(),
   );
@@ -302,7 +322,7 @@ function itemSearch() {
     errorDiv.classList.add("errorFormat");
 
     // append
-    errorP.textContent = `'${searchItem}' not found`;
+    errorP.textContent = `"${searchItem}" not found`;
   }
 } // search button
 function collapseSidebar() {
@@ -388,7 +408,10 @@ function showFilterOptions() {
   } else {
     filterInputContainer.classList.add("show");
   }
-}
+} // open the filter
+function copyText(text) {
+  navigator.clipboard.writeText(text);
+} // copy the text
 
 // backend function
 function showDialog(dialogType, timer = 3000) {
@@ -480,6 +503,8 @@ function createElement(object) {
   const taskP = document.createElement("p");
   const taskCheckBox = document.createElement("input");
   const taskAssignmentP = document.createElement("p");
+  const taskAssignmentPCopyBtn = document.createElement("button");
+  const taskAssignmentPCopyBtnIcon = document.createElement("i");
   const taskDateP = document.createElement("p");
   const taskCompleteBtn = document.createElement("button");
   const taskDeleteBtn = document.createElement("button");
@@ -491,6 +516,8 @@ function createElement(object) {
   taskDiv.appendChild(taskInfoDiv);
   taskInfoDiv.appendChild(taskP);
   taskInfoDiv.appendChild(taskAssignmentP);
+  taskDiv.appendChild(taskAssignmentPCopyBtn);
+  taskAssignmentPCopyBtn.appendChild(taskAssignmentPCopyBtnIcon);
   taskDiv.appendChild(vr1);
   taskDiv.appendChild(taskCheckBox);
   taskDiv.appendChild(vr2);
@@ -508,6 +535,7 @@ function createElement(object) {
   taskAssignmentP.classList.add("task-sub");
   taskCheckBox.classList.add("js-myCheckbox");
   taskCheckBox.setAttribute("type", "checkbox");
+  taskAssignmentPCopyBtn.classList.add("copy-Btn");
   taskCompleteBtn.classList.add("completeBtn");
   taskCompleteBtn.setAttribute("id", "js-completed-btn");
   taskDeleteBtn.classList.add("deleteBtn");
@@ -518,7 +546,8 @@ function createElement(object) {
 
   // assiding values
   taskP.innerText = object.task;
-  taskAssignmentP.innerText = object.taskAssignment;
+  taskAssignmentP.innerText = object.taskAssignment || "Assigned task";
+  taskAssignmentPCopyBtnIcon.innerHTML = `<i class="fa fa-copy"></i>`;
   taskDateP.innerText = object.shiftDate;
   taskCompleteBtn.innerHTML = `<i class="fa fa-check"></i>`;
   taskDeleteBtn.innerHTML = `<i class="fa fa-trash-o"></i>`;
@@ -589,6 +618,7 @@ function updateTaskCount() {
     tasks,
     "taskAssignment",
     "-",
+    ``,
   );
 }
 function duplicateChecker() {
@@ -605,6 +635,7 @@ function duplicateChecker() {
   }
 }
 function closeSearch() {
+  searchBtn.innerHTML = `<i class="fa fa-search"></i>`;
   taskRendering(tasks);
 }
 function saveChangelog() {
@@ -635,6 +666,13 @@ function filterArray(paramArray, filterBy, filterValue) {
   }
 
   taskRendering(filteredArray);
+}
+function showCopySuccess(element, text) {
+  navigator.clipboard.writeText(text);
+  element.innerHTML = `<i class="fa fa-check"></i>`;
+  setTimeout(() => {
+    element.innerHTML = `<i class="fa fa-copy"></i>`;
+  }, 1500);
 }
 
 // =============================================
@@ -703,15 +741,17 @@ taskField.addEventListener("click", (e) => {
   // So my delete function uses splice method for deleting the task from the array list. It uses the data-id of the task to identify the task that needs to be removed. That is why it is necessary to get the it. In this code, it is stored in the variable "taskDataSetId".
 
   const targetBtn = e.target;
+  const copyBtn = targetBtn.closest(".copy-Btn");
   const deleteBtn = targetBtn.closest(".deleteBtn");
   const completeBtn = targetBtn.closest(".completeBtn");
   const targetCB = targetBtn.matches(".js-myCheckbox");
 
-  if (!deleteBtn && !completeBtn && !targetCB) return;
+  if (!deleteBtn && !completeBtn && !targetCB && !copyBtn) return;
 
   const targetBtnDiv = e.target.closest(".task-container");
   const taskName = targetBtnDiv.querySelector(".task");
   const taskDataSetId = Number(targetBtnDiv.dataset.id);
+
   // the index of the object related to the button.
   const index = tasks.findIndex((item) => item.uniqueId === taskDataSetId);
 
@@ -721,6 +761,9 @@ taskField.addEventListener("click", (e) => {
     updateCompleteStatus(index, taskName, completeBtn);
   } else if (targetCB) {
     updateTrackerStatus(index, targetBtn);
+  } else if (copyBtn) {
+    const targetText = copyBtn.parentElement.querySelector(".task").textContent; // needs to be inside for proper deletion
+    showCopySuccess(copyBtn, targetText);
   }
 });
 searchField.addEventListener("keydown", (e) => {
