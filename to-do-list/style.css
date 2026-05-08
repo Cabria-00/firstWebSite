@@ -280,7 +280,7 @@ div.header {
 }
 
 aside {
-  width: 25vw;
+  width: 400px;
   position: absolute;
 
   left: 0;
@@ -387,6 +387,10 @@ aside .div-section {
   button {
     flex: 1;
   }
+}
+
+.copy-Btn {
+  background-color: transparent;
 }
 
 .backdropD {
